@@ -1,1 +1,15 @@
-<p>registration works!</p>
+<div class="page">
+  <form class="form" [formGroup] = 'registrationGroup' (ngSubmit)="onSubmit()">
+    <h1>Registration</h1>
+    <mat-form-field>
+      <input matInput placeholder="Enter your email" required formControlName="email">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Enter your name" required formControlName="name">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Enter password" required formControlName="password">
+    </mat-form-field>
+    <button type="submit" mat-flat-button color="primary">register</button>
+  </form>
+</div>
