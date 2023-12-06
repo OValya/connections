@@ -1,15 +1,29 @@
 <div class="page">
-  <form class="form" [formGroup] = 'registrationGroup' (ngSubmit)="onSubmit()">
+  <form class="form" [formGroup] = 'registrationForm' (ngSubmit)="onSubmit()">
     <h1>Registration</h1>
     <mat-form-field>
       <input matInput placeholder="Enter your email" required formControlName="email">
+      @if (email.hasError('email') && !email.hasError('required')) {
+      <mat-error>Please enter a valid email address</mat-error>
+      }
     </mat-form-field>
     <mat-form-field>
       <input matInput placeholder="Enter your name" required formControlName="name">
+      <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="alert alert-danger">
+        <div *ngIf="name?.errors?.['required']">Name is required.</div>
+        <div *ngIf="name?.errors?.['minlength']">
+          Name must be at least 4 characters long.
+        </div>
+      </div>
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="Enter password" required formControlName="password">
+      <input type="password" id="password" matInput placeholder="Enter password" formControlName="password">
     </mat-form-field>
-    <button type="submit" mat-flat-button color="primary">register</button>
+    <div *ngIf="name?.errors?.['extra']">
+      Name cannot be Bob.
+    </div>
+   
+    <button type="submit" mat-flat-button color="primary" [disabled]="!registrationForm.valid">register</button>
+    
   </form>
 </div>

@@ -1,29 +1,41 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import {ReactiveFormsModule, FormGroup, FormControl, Validators, FormsModule } from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
+import { passwordValidator } from '../../directives/password-validator.directive';
 
 @Component({
   selector: 'app-registration',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule],
   templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.scss']
+  styleUrls: ['./registration.component.scss'],
+  hostDirectives: [passwordValidator],
 })
 export class RegistrationComponent {
-  registrationGroup = new FormGroup(
+  registrationForm = new FormGroup(
     {
-    email : new FormControl(''),
-    name: new FormControl(''),
-    password: new FormControl('')
+    email : new FormControl('', [Validators.required, Validators.email]),
+    name: new FormControl('', [Validators.required, Validators.maxLength(40), Validators.pattern(/^[a-zA-Z\s]*$/)]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8)])
   }
 
   )
 
+  get name() {
+    return this.registrationForm.get('name');
+  }
+  get password() {
+    return this.registrationForm.get('password');
+  }
+  get email() {
+    return this.registrationForm.get('email');
+  }
+
   onSubmit(){
-    console.log('form', this.registrationGroup.value)
+    console.log('form', this.registrationForm.value)
   }
 
 }
