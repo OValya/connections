@@ -91,10 +91,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "connections-app:build:production"
+              "buildTarget": "connections-app:build:production"
             },
             "development": {
-              "browserTarget": "connections-app:build:development"
+              "buildTarget": "connections-app:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -102,7 +102,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "connections-app:build"
+            "buildTarget": "connections-app:build"
           }
         },
         "test": {

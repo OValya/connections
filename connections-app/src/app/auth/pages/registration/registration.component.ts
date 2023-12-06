@@ -4,7 +4,8 @@ import {ReactiveFormsModule, FormGroup, FormControl, Validators, FormsModule } f
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
-import { passwordValidator } from '../../directives/password-validator.directive';
+import strongPassword from '../../common/password.validator';
+
 
 @Component({
   selector: 'app-registration',
@@ -12,14 +13,13 @@ import { passwordValidator } from '../../directives/password-validator.directive
   imports: [CommonModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule],
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss'],
-  hostDirectives: [passwordValidator],
 })
 export class RegistrationComponent {
   registrationForm = new FormGroup(
     {
     email : new FormControl('', [Validators.required, Validators.email]),
     name: new FormControl('', [Validators.required, Validators.maxLength(40), Validators.pattern(/^[a-zA-Z\s]*$/)]),
-    password: new FormControl('', [Validators.required, Validators.minLength(8)])
+    password: new FormControl('', [Validators.required, Validators.minLength(8), strongPassword])
   }
 
   )
