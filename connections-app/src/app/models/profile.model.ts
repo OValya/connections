@@ -9,3 +9,10 @@ export interface Group {
   name:string;
   createdAt:string;
 }
+
+
+export interface Message {
+  authorID: string,
+  message: string,
+  createdAt: string
+}

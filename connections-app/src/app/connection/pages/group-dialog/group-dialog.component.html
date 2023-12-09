@@ -1,0 +1,19 @@
+<div class="page">
+  <div class="group__header">
+    <a href="/"><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="arrow_back"></mat-icon></a>
+    <button mat-flat-button color="primary">update</button>
+    <button mat-flat-button>delete</button>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="group__main">
+  @for (message of messages; track message) {
+    <div class="message">
+      <p>{{message.createdAt | date}} </p>
+      <p>{{message.authorID}} </p>
+      <p>{{message.message}} </p>
+    </div>
+
+  }
+  </div>
+
+</div>
