@@ -6,24 +6,24 @@
   </div>
   <mat-divider></mat-divider>
   <div class="group__main">
-  @for (message of messages; track message) {
+    @for (message of messages; track message) {
     <div class="message">
       <p>{{message.createdAt | date}} </p>
       <p>{{message.authorID}} </p>
       <p>{{message.message}} </p>
     </div>
 
-  }
+    }
   </div>
- 
+
   <form class="message-form">
     <mat-form-field class="input-message">
       <mat-label>Type your message</mat-label>
-      <input matInput placeholder="hello..."> 
+      <input matInput placeholder="hello...">
       <button matSuffix mat-icon-button color="primary" aria-label="button for send message">
         <mat-icon>send</mat-icon>
       </button>
     </mat-form-field>
-   
+
   </form>
 </div>

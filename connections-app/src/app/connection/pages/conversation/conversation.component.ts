@@ -7,14 +7,15 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule} from '@angular/forms';
+
 @Component({
-  selector: 'app-group-dialog',
+  selector: 'app-conversation',
   standalone: true,
   imports: [CommonModule, MatDividerModule, MatButtonModule, MatIconModule, FormsModule, MatFormFieldModule, MatInputModule ],
-  templateUrl: './group-dialog.component.html',
-  styleUrl: './group-dialog.component.scss'
+  templateUrl: './conversation.component.html',
+  styleUrl: './conversation.component.scss'
 })
-export class GroupDialogComponent {
+export class ConversationComponent {
   messages: Message[] = [
     {authorID:'123',
      message:'hello',
@@ -34,4 +35,6 @@ export class GroupDialogComponent {
 
 
   ]
+
+
 }
