@@ -34,6 +34,6 @@
     
    
     <button type="submit" mat-flat-button color="primary" [disabled]="!registrationForm.valid">register</button>
-    <div>Has an account already? <a>Sign in</a></div>
+    <div>Has an account already? <a routerLink="/signin" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Sign in</a></div>
   </form>
 </div>
