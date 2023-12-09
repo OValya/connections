@@ -1,0 +1,37 @@
+<div class="page">
+  <div class="group">
+    <div class="buttons">
+       <button mat-stroked-button > update</button> 
+       <button mat-flat-button color="primary"> create</button> 
+    </div>
+    <mat-divider></mat-divider>
+    <mat-list>
+    <div mat-subheader>Chats</div>
+    @for (group of groups; track group) {
+    <mat-list-item>
+      <mat-icon matListItemIcon>chat</mat-icon>
+      <div matListItemTitle>{{group.name}}</div>
+      <div matListItemLine>{{group.createdAt | date}}</div>
+    </mat-list-item>
+    }
+    </mat-list>
+  </div>
+  <mat-divider [vertical]="true"></mat-divider>
+  <div class="group">
+    <div class="buttons">
+      <button mat-stroked-button> update</button>
+    </div>
+    <mat-divider></mat-divider>
+    <mat-list>
+      <div mat-subheader>People</div>
+      @for (person of people; track person) {
+      <mat-list-item>
+        <mat-icon matListItemIcon>people</mat-icon>
+        <div matListItemTitle>{{person.name}}</div>
+        
+      </mat-list-item>
+      }
+    </mat-list>
+
+  </div>
+</div>

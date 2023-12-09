@@ -1,0 +1,18 @@
+.page{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  
+}
+
+.group{
+  width: 30%;
+
+}
+
+.buttons{
+  padding: 15px;
+  display: flex;
+  justify-content: left;
+  column-gap: 20px;
+}
