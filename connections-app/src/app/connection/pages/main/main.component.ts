@@ -5,11 +5,13 @@ import {CommonModule, DatePipe} from '@angular/common';
 import {MatListModule} from '@angular/material/list';
 import { Group } from 'src/app/models/profile.model';
 import {MatButtonModule} from '@angular/material/button';
+import { MatDialog, MatDialogConfig, MatDialogModule } from '@angular/material/dialog';
+import { ModalComponent } from '../../components/modal/modal.component';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [CommonModule, MatDividerModule, MatIconModule, MatListModule, MatButtonModule],
+  imports: [CommonModule, MatDividerModule, MatIconModule, MatListModule, MatButtonModule, MatDialogModule],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })
@@ -34,5 +36,27 @@ export class MainComponent {
       chatId: '3',},
      {name: 'mama'},    
   ];
+
+  nameGroup!:string;
+
+  constructor(public dialog:MatDialog){}
+
+
+  openDialog(){
+     const dialogConfig = new MatDialogConfig();
+
+     dialogConfig.disableClose = true;
+     dialogConfig.autoFocus = true;
+
+     dialogConfig.data = {
+       name: ''
+    };
+
+    const dialogRef = this.dialog.open(ModalComponent, dialogConfig);
+
+     dialogRef.afterClosed().subscribe(
+        data => this.groups.push({name:data, createdAt:'05/05/2023'})
+    );    
+  }
 
 }
