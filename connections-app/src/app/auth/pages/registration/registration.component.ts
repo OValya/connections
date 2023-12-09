@@ -6,11 +6,13 @@ import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import strongPassword from '../../common/password.validator';
 
+import { Profile } from 'src/app/models/profile.model';
+
 
 @Component({
   selector: 'app-registration',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule],
+  imports: [CommonModule,  FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule],
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss'],
 })
@@ -25,13 +27,13 @@ export class RegistrationComponent {
   )
 
   get name() {
-    return this.registrationForm.get('name');
+    return this.registrationForm.get('name')!;
   }
   get password() {
-    return this.registrationForm.get('password');
+    return this.registrationForm.get('password')!;
   }
   get email() {
-    return this.registrationForm.get('email');
+    return this.registrationForm.get('email')!;
   }
 
   onSubmit(){

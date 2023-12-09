@@ -1,7 +1,33 @@
-<div class="example-container">
-  <mat-form-field>
-    <mat-label>Enter your email</mat-label>
-    <input matInput placeholder="pat@example.com" required>
-   
-  </mat-form-field>
+<div class="page">
+  <form class="form" [formGroup]='loginForm' (ngSubmit)="onSubmit()">
+    <h1>Sign in</h1>
+    <mat-form-field>
+      <input matInput placeholder="Enter your email" formControlName="email">
+      @if (email.hasError('email') && !email.hasError('required')) {
+      <mat-error>Please enter a valid email address</mat-error>
+      }
+      @if (email.hasError('required')) {
+      <mat-error>Please enter e-mail</mat-error>
+      }
+    </mat-form-field>
+    
+    <mat-form-field>
+      <input type="password" matInput placeholder="Enter password" formControlName="password">
+      @if (password.hasError('required')) {
+      <mat-error>Please enter password</mat-error>
+      }
+      @if (password.hasError('minlength')) {
+      <mat-error>Password should have at least 8 chars</mat-error>
+      }
+      @if (password.hasError('strong')&&!password.hasError('required')&&!password.hasError('minlength')) {
+      <mat-error>Password should have at least 1 number, 1 special symbol, 1 uppercase char. </mat-error>
+      }
+    </mat-form-field>
+
+
+    <button type="submit" mat-flat-button color="primary" [disabled]="!loginForm.valid">register</button>
+
+    <div>Haven't got an account yet? <a>Sign up</a></div>
+
+  </form>
 </div>

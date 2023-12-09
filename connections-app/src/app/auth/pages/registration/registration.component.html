@@ -3,37 +3,37 @@
     <h1>Registration</h1>
     <mat-form-field>
       <input matInput placeholder="Enter your email"  formControlName="email">
-      @if (email?.hasError('email') && !email?.hasError('required')) {
+      @if (email.hasError('email') && !email.hasError('required')) {
         <mat-error>Please enter a valid email address</mat-error>
       }
-      @if (email?.hasError('required')) {
+      @if (email.hasError('required')) {
         <mat-error>Please enter e-mail</mat-error>
       }
     </mat-form-field>
     <mat-form-field>
       <input matInput placeholder="Enter your name" formControlName="name">
-      @if (name?.hasError('required')) {
+      @if (name.hasError('required')) {
         <mat-error>Please enter name</mat-error>
       }
-      @if (name?.hasError('maxlength')) {
+      @if (name.hasError('maxlength')) {
         <mat-error>Name can not be more 40 chars</mat-error>
       }
     </mat-form-field>
     <mat-form-field>
       <input type="password" matInput placeholder="Enter password" formControlName="password">
-      @if (password?.hasError('required')) {
+      @if (password.hasError('required')) {
         <mat-error>Please enter password</mat-error>
       }
-      @if (password?.hasError('minlength')) {
+      @if (password.hasError('minlength')) {
       <mat-error>Password should have at least 8 chars</mat-error>
       }
-      @if (password?.hasError('strong')&&!password?.hasError('required')&&!password?.hasError('minlength')) {
+      @if (password.hasError('strong')&&!password.hasError('required')&&!password.hasError('minlength')) {
       <mat-error>Password should have at least 1 number, 1 special symbol, 1 uppercase char. </mat-error>
       }
     </mat-form-field>
     
    
     <button type="submit" mat-flat-button color="primary" [disabled]="!registrationForm.valid">register</button>
-    
+    <div>Has an account already? <a>Sign in</a></div>
   </form>
 </div>
