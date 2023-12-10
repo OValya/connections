@@ -38,7 +38,7 @@ export class LoginComponent {
   }
 
   onSubmit(){
-    this.service.login().subscribe(res => console.log('res', res))
-    console.log('form', this.loginForm.value)
+    this.service.login(this.email.value!, this.password.value!).subscribe(res => console.log('res', res))
+   // console.log('form', this.loginForm.value)
   }
 }

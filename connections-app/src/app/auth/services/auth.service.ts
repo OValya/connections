@@ -23,14 +23,14 @@ export class AuthService {
   // store the URL so we can redirect after logging in
   redirectUrl: string | null = null;
 
-  registration():Observable<HttpResponse<AuthResponse>>{
-    return this.http.post<AuthResponse>(REGISTRATION, {email: 'mam@mail.com', name:'mam', password:'1Aa@23456'}, {observe: 'response'}).
+  registration(name:string, email:string, password:string):Observable<HttpResponse<AuthResponse>>{
+    return this.http.post<AuthResponse>(REGISTRATION, {email, name, password}, {observe: 'response'}).
     pipe(catchError(this.handleError))
     
   }
 
-  login(): Observable<HttpResponse<AuthResponse>> {
-    return this.http.post<AuthResponse>(LOGIN, {email: 'valya@mail.com', password:'1Aa@23456'}, {observe: 'response'}).
+  login(email:string, password:string): Observable<HttpResponse<AuthResponse>> {
+    return this.http.post<AuthResponse>(LOGIN, {email, password}, {observe: 'response'}).
     pipe(catchError(this.handleError))
     
   }

@@ -41,7 +41,7 @@ export class RegistrationComponent {
   }
 
   onSubmit(){
-    this.service.registration().subscribe(res => console.log('res', res))
+    this.service.registration(this.name.value!, this.email.value!, this.password.value!).subscribe(res => console.log('res', res))
     console.log('form', this.registrationForm.value)
   }
 
