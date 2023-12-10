@@ -6,7 +6,8 @@ import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import strongPassword from '../../common/password.validator';
 import {RouterModule} from "@angular/router";
-
+import { AuthService } from '../../services/auth.service';
+import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,9 @@ import {RouterModule} from "@angular/router";
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
+   constructor( private service: AuthService){
+
+   }
 
    loginForm = new FormGroup(
     {
@@ -34,6 +38,7 @@ export class LoginComponent {
   }
 
   onSubmit(){
+    this.service.login().subscribe(res => console.log('res', res))
     console.log('form', this.loginForm.value)
   }
 }

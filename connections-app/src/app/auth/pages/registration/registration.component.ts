@@ -9,6 +9,8 @@ import {RouterModule} from "@angular/router";
 
 import { Profile } from 'src/app/models/profile.model';
 
+import { AuthService } from '../../services/auth.service';
+
 
 @Component({
   selector: 'app-registration',
@@ -18,6 +20,7 @@ import { Profile } from 'src/app/models/profile.model';
   styleUrls: ['./registration.component.scss'],
 })
 export class RegistrationComponent {
+  constructor(private service:AuthService){}
   registrationForm = new FormGroup(
     {
     email : new FormControl('', [Validators.required, Validators.email]),
@@ -38,6 +41,7 @@ export class RegistrationComponent {
   }
 
   onSubmit(){
+    this.service.registration().subscribe(res => console.log('res', res))
     console.log('form', this.registrationForm.value)
   }
 
