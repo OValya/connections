@@ -46,4 +46,8 @@ export class ProfileComponent {
     this.readable=false;
   }
 
+  logout(){
+    
+  }
+
 }
