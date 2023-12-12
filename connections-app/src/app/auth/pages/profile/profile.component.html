@@ -1,5 +1,29 @@
 <div class="page">
   <div mat-subheader>Profile</div>
-  
 
+  <div class="field">
+   <label > User's ID:
+    <span>{{profile.uid}}</span>
+   </label>
+      
+  </div>
+  <div class="field">
+    <label> Email:
+      <span>{{profile.email}}</span>
+    </label>
+  </div>
+  <div class="field">
+    <label> Created at:
+      <span>{{profile.createdAt}}</span>
+    </label>
+  </div>
+  <div class="field">
+      <label> Name:
+        <input mat-input [formControl]="name" [readonly]="!readable">
+      </label>
+   
+    <button mat-flat-button color="primary" *ngIf="!readable" (click)="editProfile()" > edit </button>
+    <button mat-flat-button color="primary" *ngIf="readable" (click)="save()" [disabled]="!name.valid"> save </button>
+    <button mat-flat-button *ngIf="readable" (click)="cancel()"> cancel </button>
+  </div>
 </div>

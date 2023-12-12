@@ -5,7 +5,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import strongPassword from '../../common/password.validator';
-import {RouterModule} from "@angular/router";
+import {Router, RouterModule} from "@angular/router";
 import { AuthService } from '../../services/auth.service';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 
@@ -17,7 +17,7 @@ import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-   constructor( private service: AuthService){
+   constructor( private service: AuthService, private router:Router){
 
    }
 
@@ -38,7 +38,9 @@ export class LoginComponent {
   }
 
   onSubmit(){
-    this.service.login(this.email.value!, this.password.value!).subscribe(res => console.log('res', res))
-   // console.log('form', this.loginForm.value)
+    this.service.guardTrue();
+    localStorage.setItem('token', '123456')
+    this.router.navigate(['/']);
+    //this.service.login(this.email.value!, this.password.value!).subscribe(()=> {if(this.service.isLoggedIn) this.router.navigate(['/']) })
   }
 }

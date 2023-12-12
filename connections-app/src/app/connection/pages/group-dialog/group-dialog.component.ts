@@ -7,14 +7,18 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule} from '@angular/forms';
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-group-dialog',
   standalone: true,
-  imports: [CommonModule, MatDividerModule, MatButtonModule, MatIconModule, FormsModule, MatFormFieldModule, MatInputModule ],
+  imports: [CommonModule, MatDividerModule, MatButtonModule, MatIconModule, FormsModule, MatFormFieldModule, MatInputModule, RouterModule ],
   templateUrl: './group-dialog.component.html',
   styleUrl: './group-dialog.component.scss'
 })
 export class GroupDialogComponent {
+  constructor(){
+
+  }
   messages: Message[] = [
     {authorID:'123',
      message:'hello',

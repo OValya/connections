@@ -1,8 +1,7 @@
-export interface Profile {
+export interface User {
   name: string|null;
   email:string|null;
   password:string|null;
-  createdAt?:string;
 }
 
 export interface Group {
@@ -16,3 +15,13 @@ export interface Message {
   message: string,
   createdAt: string
 }
+
+export interface Profile {
+  
+  email: string,
+  name:string;
+  uid: string;
+  createdAt: string; // unix timestamp in milliseconds
+  
+}
+

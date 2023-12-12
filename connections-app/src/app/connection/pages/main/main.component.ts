@@ -7,6 +7,9 @@ import { Group } from 'src/app/models/profile.model';
 import {MatButtonModule} from '@angular/material/button';
 import { MatDialog, MatDialogConfig, MatDialogModule } from '@angular/material/dialog';
 import { ModalComponent } from '../../components/modal/modal.component';
+import { AuthService } from 'src/app/auth/services/auth.service';
+import { routes } from 'src/app/app.routes';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -39,7 +42,15 @@ export class MainComponent {
 
   nameGroup!:string;
 
-  constructor(public dialog:MatDialog){}
+  constructor(public dialog:MatDialog, private service: AuthService, private router:Router){}
+
+  init(){
+    console.log('isloggin', this.service.isLoggedIn)
+  }
+
+  openGroup(){
+    this.router.navigate(['group/1'])
+  }
 
 
   openDialog(){
