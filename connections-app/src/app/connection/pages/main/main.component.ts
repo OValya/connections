@@ -44,9 +44,6 @@ export class MainComponent {
 
   constructor(public dialog:MatDialog, private service: AuthService, private router:Router){}
 
-  init(){
-    console.log('isloggin', this.service.isLoggedIn)
-  }
 
   openGroup(){
     this.router.navigate(['group/1'])

@@ -7,8 +7,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackBarService } from './core/services/snackbar.service';
 import { AuthService } from './auth/services/auth.service';
+import { provideStore } from '@ngrx/store';
+import { httpInterceptorProviders } from './http-interceptors';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes, withPreloading(PreloadAllModules)), provideAnimations(), {provide:AuthService},
-    importProvidersFrom([HttpClientModule, MatSnackBarModule, SnackBarService, ]),]
+  providers: [provideRouter(routes, withPreloading(PreloadAllModules)), provideAnimations(), { provide: AuthService },
+    importProvidersFrom([HttpClientModule, MatSnackBarModule, SnackBarService,]), provideStore(),  httpInterceptorProviders]
 };

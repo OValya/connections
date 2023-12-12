@@ -5,7 +5,7 @@ import { inject } from '@angular/core';
 export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router)
-  console.log('guard', authService)
+  //console.log('guard', authService.isLoggedIn)
 
   if(authService.isLoggedIn) return true
 

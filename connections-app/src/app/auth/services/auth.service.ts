@@ -1,12 +1,12 @@
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, catchError, delay, map, of, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, delay, map, of, tap, throwError } from 'rxjs';
 import { SnackBarService } from 'src/app/core/services/snackbar.service';
-import { LOGIN, REGISTRATION } from 'src/app/endpoints/endpoints';
+import { LOGIN, PROFILE, REGISTRATION } from 'src/app/endpoints/endpoints';
+import { Profile } from 'src/app/models/profile.model';
 
 interface AuthResponse {
-  code?: string;
   token: string;
   uid: string
 }
@@ -15,31 +15,27 @@ interface AuthResponse {
 @Injectable()
 export class AuthService {
   isLoggedIn:boolean;
-
+  isLoggedin$: BehaviorSubject<boolean>;
+  
   constructor(private http:HttpClient, private snakbarService:SnackBarService, private router:Router) {
-    this.isLoggedIn=true;
+    this.isLoggedIn=localStorage.getItem('token')?true:false;
+    this.isLoggedin$ = new BehaviorSubject(localStorage.getItem('token')?true:false)//this.isLoggedIn);
    }
-   
-
-  // store the URL so we can redirect after logging in
-  redirectUrl: string | null = null;
-
-  guardTrue(){
-    this.isLoggedIn=true;
-  }
 
   registration(name:string, email:string, password:string):Observable<HttpResponse<AuthResponse>>{
-    return this.http.post<AuthResponse>(REGISTRATION, {email, name, password}, {observe: 'response'}).
+    return this.http.post<AuthResponse>(REGISTRATION, {email, name, password}, {observe: 'response', headers:{skip:"true"}}).
     pipe(catchError(this.handleError),
            tap(()=>{this.snakbarService.openSnackBar('Success!'); 
-                  this.router.navigate(['/signin'])}
+                    this.router.navigate(['/signin'])}
             ))
   }
 
   login(email:string, password:string): Observable<HttpResponse<AuthResponse>> {
-    return this.http.post<AuthResponse>(LOGIN, {email, password}, {observe: 'response'}).
+    return this.http.post<AuthResponse>(LOGIN, {email, password}, {observe: 'response', headers:{skip:"true"}}).
     pipe(catchError(this.handleError),
-         tap(()=>{this.isLoggedIn=true; 
+         tap(()=>{this.isLoggedIn=true;
+                  this.isLoggedin$.next(true);
+                  localStorage.setItem('email', email); 
                   this.snakbarService.openSnackBar('Success!'); 
                   }
             )
@@ -48,10 +44,32 @@ export class AuthService {
 
   logout(): void {  
     this.isLoggedIn = false;
+    this.isLoggedin$.next(false);
+    localStorage.removeItem('token');
+    localStorage.removeItem('uid');
+    localStorage.removeItem('email');
+    this.router.navigate(['/']);
+  }
+
+  getAuthorization(){
+    const uid =localStorage.getItem('uid')!;
+    const token =localStorage.getItem('token')!;
+    const email =localStorage.getItem('email')!;
+    return {uid, token, email}
+  }
+
+  openProfile():Observable<HttpResponse<Profile>>{
+
+    return this.http.get<Profile>(PROFILE, {observe: 'response'}).
+      pipe(catchError(this.handleError),
+           tap(()=>{this.snakbarService.openSnackBar('Access is allowed!'); 
+                    this.router.navigate(['/profile'])}
+            ) 
+      )
   }
 
   private handleError = (error: HttpErrorResponse) => {
-    this.snakbarService.openSnackBar(error.error.message);
+    this.snakbarService.openSnackBar(error.error.message);  
     return throwError(() => error.message);
   }
 

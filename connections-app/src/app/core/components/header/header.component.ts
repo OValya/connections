@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -12,9 +13,16 @@ import { Router } from '@angular/router';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-  constructor(private router:Router){}
+  login:boolean;
+  
+  constructor(private router:Router, private service:AuthService){
+    this.service.isLoggedin$.subscribe((value)=>this.login=value);
+  }
+
+
   openProfile(){
-    this.router.navigate(['/profile']);
+    this.service.openProfile().subscribe((value)=>console.log('profile', value))
+    
   }
 
 }

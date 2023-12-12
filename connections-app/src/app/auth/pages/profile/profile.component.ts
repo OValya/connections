@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Profile } from 'src/app/models/profile.model';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SnackBarService } from 'src/app/core/services/snackbar.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -25,7 +26,7 @@ export class ProfileComponent {
     uid:'sdfdsf55465'
   }
 
-  constructor(private snackBar:SnackBarService){
+  constructor(private snackBar:SnackBarService, private authService:AuthService){
 
   }
 
@@ -47,7 +48,7 @@ export class ProfileComponent {
   }
 
   logout(){
-    
+    this.authService.logout();
   }
 
 }

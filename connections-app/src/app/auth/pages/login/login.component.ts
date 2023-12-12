@@ -38,9 +38,15 @@ export class LoginComponent {
   }
 
   onSubmit(){
-    this.service.guardTrue();
-    localStorage.setItem('token', '123456')
+   // localStorage.setItem('token', '123456')
     this.router.navigate(['/']);
-    //this.service.login(this.email.value!, this.password.value!).subscribe(()=> {if(this.service.isLoggedIn) this.router.navigate(['/']) })
+    this.service.login(this.email.value!, this.password.value!).subscribe((value)=> {
+      if(this.service.isLoggedIn) {
+        this.router.navigate(['/']);
+        localStorage.setItem('token', value.body?.token!);
+        localStorage.setItem('uid', value.body?.uid!);
+      }
+      console.log('value login', value)
+    })  
   }
 }
