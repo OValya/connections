@@ -17,9 +17,13 @@ export interface Message {
 }
 
 export interface Profile {
-  email: string,
-  name:string;
-  uid: string;
-  createdAt: string; // unix timestamp in milliseconds
+  email: {
+    S:string},
+  name:{
+    S:string};
+  uid: {
+    S:string};
+  createdAt: {
+    S:string}; // unix timestamp in milliseconds
 }
 

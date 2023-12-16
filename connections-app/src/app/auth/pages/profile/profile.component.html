@@ -1,22 +1,26 @@
 <div class="page">
   <button mat-flat-button color="primary" (click)="logout()">logout</button>
   <div mat-subheader>Profile</div>
+  <div *ngIf="(profile$ | async) as profile">
+
+  
 
   <div class="field">
    <label > User's ID:
-    <span>{{profile.uid}}</span>
+    <span>{{profile.uid.S}}</span>
    </label>
       
   </div>
   <div class="field">
     <label> Email:
-      <span>{{profile.email}}</span>
+      <span>{{profile.email.S}}</span>
     </label>
   </div>
   <div class="field">
     <label> Created at:
-      <span>{{profile.createdAt}}</span>
+      <span>{{profile.createdAt.S}}</span>
     </label>
+  </div>
   </div>
   <div class="field">
       <label> Name:

@@ -19,10 +19,13 @@ export class HeaderComponent {
     this.service.isLoggedin$.subscribe((value)=>this.login=value);
   }
 
-
+  
+  loadMain(){
+    this.router.navigate(['/'])
+  }
   openProfile(){
-    this.service.openProfile().subscribe((value)=>console.log('profile', value))
-    
+    this.router.navigate(['/profile'])
+    //this.service.getProfile().subscribe((value)=>console.log('profile', value))
   }
 
 }

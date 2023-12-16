@@ -1,7 +1,6 @@
-interface UserState{
-  uid:string|null;
-  email:string|null;
-  name:string|null;
-  createdAt:string|null;
+import { Profile } from "../models/profile.model";
+
+export interface UserState{
+  profile:Profile|null;
   token:string|null;
 }

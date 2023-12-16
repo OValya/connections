@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
@@ -8,6 +8,10 @@ import { Profile } from 'src/app/models/profile.model';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SnackBarService } from 'src/app/core/services/snackbar.service';
 import { AuthService } from '../../services/auth.service';
+import { Observable } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { selectUser } from 'src/app/store/selectors/user.selectors';
+import {getProfile, updateProfile} from 'src/app/store/actions/user.actions'
 
 @Component({
   selector: 'app-profile',
@@ -16,34 +20,46 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
-export class ProfileComponent {
+export class ProfileComponent implements  OnInit{
   readable: boolean = false;
+  userName:string;
+  profile$:Observable<Profile|null>
+  name:FormControl<string|null>
 
-  profile:Profile = {
-    createdAt: '25/05/23',
-    email: 'valys@dffs',
-    name: 'valys',
-    uid:'sdfdsf55465'
+  constructor(private snackBar:SnackBarService, private authService:AuthService, private store:Store){
+    this.profile$=this.store.select(selectUser);
+    this.profile$.subscribe(profile => {
+      this.userName = profile?.name.S!;
+      this.name = new FormControl(this.userName, [Validators.required, Validators.maxLength(40), Validators.pattern(/^[a-zA-Z\s]*$/)])
+    })
   }
 
-  constructor(private snackBar:SnackBarService, private authService:AuthService){
-
+  ngOnInit(): void {
+    this.getProfile();  
   }
 
-  name = new FormControl(this.profile.name, [Validators.required, Validators.maxLength(40), Validators.pattern(/^[a-zA-Z\s]*$/)])
+  getProfile(){
+    this.profile$.subscribe((data)=>{
+      if(!data) this.store.dispatch(getProfile());
+    })
+  }
+
+
+  
 
   editProfile(){
     this.readable = true;
   }
 
   save(){
-    this.snackBar.openSnackBar(`New name ${this.name.value} save to your profile!`)
-    this.profile.name = this.name.value!;
+    //this.snackBar.openSnackBar(`New name ${this.name.value} save to your profile!`)
+   // this.profile.name = this.name.value!;
+    this.store.dispatch(updateProfile({name:this.name.value!}))
     this.readable=false;
   }
 
   cancel(){
-    this.name.setValue('');
+    //this.name.setValue({s:''});
     this.readable=false;
   }
 

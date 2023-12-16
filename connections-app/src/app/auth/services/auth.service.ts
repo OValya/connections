@@ -17,10 +17,12 @@ export class AuthService {
   isLoggedIn:boolean;
   isLoggedin$: BehaviorSubject<boolean>;
   
+  
   constructor(private http:HttpClient, private snakbarService:SnackBarService, private router:Router) {
     this.isLoggedIn=localStorage.getItem('token')?true:false;
-    this.isLoggedin$ = new BehaviorSubject(localStorage.getItem('token')?true:false)//this.isLoggedIn);
+    this.isLoggedin$ = new BehaviorSubject(this.isLoggedIn);
    }
+
 
   registration(name:string, email:string, password:string):Observable<HttpResponse<AuthResponse>>{
     return this.http.post<AuthResponse>(REGISTRATION, {email, name, password}, {observe: 'response', headers:{skip:"true"}}).
@@ -33,9 +35,13 @@ export class AuthService {
   login(email:string, password:string): Observable<HttpResponse<AuthResponse>> {
     return this.http.post<AuthResponse>(LOGIN, {email, password}, {observe: 'response', headers:{skip:"true"}}).
     pipe(catchError(this.handleError),
-         tap(()=>{this.isLoggedIn=true;
+         tap(({body})=>{this.isLoggedIn=true;
                   this.isLoggedin$.next(true);
-                  localStorage.setItem('email', email); 
+                  localStorage.setItem('email', email);
+                  localStorage.setItem('token', body?.token!);
+                  localStorage.setItem('uid', body?.uid!);
+                  this.router.navigate(['/']);
+                 
                   this.snakbarService.openSnackBar('Success!'); 
                   }
             )
@@ -58,16 +64,23 @@ export class AuthService {
     return {uid, token, email}
   }
 
-  openProfile():Observable<HttpResponse<Profile>>{
-
+  getProfile():Observable<HttpResponse<Profile>>{
     return this.http.get<Profile>(PROFILE, {observe: 'response'}).
       pipe(catchError(this.handleError),
            tap(()=>{this.snakbarService.openSnackBar('Access is allowed!'); 
                     this.router.navigate(['/profile'])}
-            ) 
+            ),
       )
   }
 
+  updateProfile(name:string):Observable<HttpResponse<Profile>>{
+    return this.http.put<Profile>(PROFILE, {name}, {observe: 'response'}).
+      pipe(catchError(this.handleError),
+      tap(()=> this.snakbarService.openSnackBar(`Profile is update with ${name}`)))
+  }
+  
+  
+  
   private handleError = (error: HttpErrorResponse) => {
     this.snakbarService.openSnackBar(error.error.message);  
     return throwError(() => error.message);

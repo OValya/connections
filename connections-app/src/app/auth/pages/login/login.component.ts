@@ -8,6 +8,8 @@ import strongPassword from '../../common/password.validator';
 import {Router, RouterModule} from "@angular/router";
 import { AuthService } from '../../services/auth.service';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import { Store } from '@ngrx/store';
+import { login } from 'src/app/store/actions/user.actions';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +19,7 @@ import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-   constructor( private service: AuthService, private router:Router){
+   constructor( private service: AuthService, private router:Router, private store:Store){
 
    }
 
@@ -38,15 +40,15 @@ export class LoginComponent {
   }
 
   onSubmit(){
-   // localStorage.setItem('token', '123456')
-    this.router.navigate(['/']);
-    this.service.login(this.email.value!, this.password.value!).subscribe((value)=> {
-      if(this.service.isLoggedIn) {
-        this.router.navigate(['/']);
-        localStorage.setItem('token', value.body?.token!);
-        localStorage.setItem('uid', value.body?.uid!);
-      }
-      console.log('value login', value)
-    })  
+    this.store.dispatch(login({email:this.email.value!, password:this.password.value!}));
+    
+    // this.service.login(this.email.value!, this.password.value!).subscribe((value)=> {
+    //   if(this.service.isLoggedIn) {
+    //     this.router.navigate(['/']);
+    //     localStorage.setItem('token', value.body?.token!);
+    //     localStorage.setItem('uid', value.body?.uid!);
+    //   }
+    //   console.log('value login', value)
+    // })  
   }
 }
