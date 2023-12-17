@@ -1,18 +1,20 @@
 <div class="page">
   <div class="group">
     <div class="buttons">
-       <button mat-stroked-button (click)="openGroup()"> update</button> 
+       <button mat-stroked-button (click)="updateGroup()"> update</button> 
        <button mat-flat-button color="primary" (click)="openDialog()"> create</button> 
     </div>
     <mat-divider></mat-divider>
     <mat-list>
     <div mat-subheader>Chats</div>
-    @for (group of groups; track group) {
-    <mat-list-item>
-      <mat-icon matListItemIcon>chat</mat-icon>
-      <div matListItemTitle>{{group.name}}</div>
-      <div matListItemLine>{{group.createdAt | date}}</div>
-    </mat-list-item>
+    @for (group of groups$ |async; track group) {
+    <!-- <a class="link" routerLink="/group/{{group.id.S}}"> -->
+      <mat-list-item style="cursor: pointer" routerLink="/group/{{group.id.S}}">
+        <mat-icon style="color: blueviolet;" matListItemIcon>chat</mat-icon>
+        <div matListItemTitle>{{group.name.S}}</div>
+        <div matListItemLine>{{group.createdAt.S| date}}</div>
+      </mat-list-item>
+    <!-- </a> -->
     }
     </mat-list>
   </div>

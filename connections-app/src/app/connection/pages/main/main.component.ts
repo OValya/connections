@@ -1,24 +1,32 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatIconModule} from '@angular/material/icon';
 import {CommonModule, DatePipe} from '@angular/common';
 import {MatListModule} from '@angular/material/list';
-import { Group, GroupList } from 'src/app/models/profile.model';
+import { Group, GroupList, PeopleList } from 'src/app/models/profile.model';
 import {MatButtonModule} from '@angular/material/button';
 import { MatDialog, MatDialogConfig, MatDialogModule } from '@angular/material/dialog';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { routes } from 'src/app/app.routes';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { GroupsService } from '../../services/groups.service';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as ConnectionActions from "../../../store/actions/connection.actions";
+import * as ConnectionAPIActions from "../../../store/actions/connection-api.actions";
+import { selectAllGroups } from 'src/app/store/selectors/connection.selectors';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [CommonModule, MatDividerModule, MatIconModule, MatListModule, MatButtonModule, MatDialogModule],
+  imports: [CommonModule, MatDividerModule, MatIconModule, MatListModule, MatButtonModule, MatDialogModule, RouterModule],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })
-export class MainComponent {
+export class MainComponent implements OnInit{
+  groups$: Observable<Group[]>;
+  people$: Observable<PeopleList>;
   groups: GroupList;
   //  = [
   //   {
@@ -43,11 +51,24 @@ export class MainComponent {
 
   nameGroup!:string;
 
-  constructor(public dialog:MatDialog, private service: AuthService, private router:Router){}
+  constructor(public dialog:MatDialog, private groupService: GroupsService, private router:Router, private store:Store){
+      this.groups$ = this.store.select(selectAllGroups)  
+  }
+
+  ngOnInit(): void {
+     this.groups$.subscribe((data)=>{
+      if(data.length===0) this.store.dispatch(ConnectionAPIActions.loadGroupList());
+   })
+  }
+
+ 
 
 
-  openGroup(){
-    this.router.navigate(['group/1'])
+  updateGroup(){
+    this.store.dispatch(ConnectionAPIActions.loadGroupList());
+
+    //this.router.navigate(['group/1'])
+
   }
 
 

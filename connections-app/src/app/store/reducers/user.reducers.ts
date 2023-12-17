@@ -1,6 +1,5 @@
 import { createReducer, on } from "@ngrx/store"
 import { setLoading, removeToken,setProfile, setToken, updateNameProfile} from '../actions/user.actions'
-import { Action } from "rxjs/internal/scheduler/Action"
 import { UserState } from "../connections.state"
 
 const initialState:UserState = {

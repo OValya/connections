@@ -24,6 +24,26 @@ export interface GroupList {
   Items: Group[]
 }
 
+export interface PeopleList{
+  Count:number;
+  Items:Profile[] //??
+}
+export interface ChatList{
+  Count:number;
+  Items:Chat[] //??
+}
+
+export interface Chat{
+  id: {
+        S: string // conversation id
+      };
+  companionID: {
+        S: string // conversation parter's id
+      }
+}
+
+
+
 
 export interface Message {
   authorID: string,

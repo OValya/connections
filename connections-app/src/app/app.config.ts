@@ -13,11 +13,13 @@ import { userReducer } from './store/reducers/user.reducers';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { LoginEffects } from './store/effects/user.effects';
+import { ConnectionEffects } from './store/effects/connection.effects';
+import { GroupsReducer } from './store/reducers/connection.reducers';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes, withPreloading(PreloadAllModules)), provideAnimations(), { provide: AuthService },
     importProvidersFrom([HttpClientModule, MatSnackBarModule, SnackBarService,]), 
-    provideStore({ user: userReducer }), httpInterceptorProviders, provideEffects([LoginEffects]),
+    provideStore({ user: userReducer, groups: GroupsReducer}), httpInterceptorProviders, provideEffects([LoginEffects, ConnectionEffects]),
     provideStoreDevtools({
       maxAge: 25, // Retains last 25 states
     })]

@@ -16,3 +16,13 @@
   justify-content: left;
   column-gap: 20px;
 }
+
+mat-list-item{
+  cursor: pointer;
+  transition: all 0.2s ease;
+  &:hover {
+    box-shadow: 5px 5px 5px rgba(187, 117, 206, 0.777), -5px -5px 5px rgba(187, 117, 206, 0.777) ;
+    transition: all 0.2s ease;
+}
+}
+
