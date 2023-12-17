@@ -28,19 +28,39 @@ export interface PeopleList{
   Count:number;
   Items:Profile[] //??
 }
-export interface ChatList{
-  Count:number;
-  Items:Chat[] //??
+// export interface PrivateChatList{
+//   Count:number;
+//   Items:Chat[] //??
+// }
+
+// export interface PrivateChat{
+//   id: {
+//         S: string // conversation id
+//       };
+//   companionID: {
+//         S: string // conversation parter's id
+//       }
+// }
+
+export interface GroupMessageList{
+  Count:number,
+  Items: GroupMessage[]
 }
 
-export interface Chat{
-  id: {
-        S: string // conversation id
-      };
-  companionID: {
-        S: string // conversation parter's id
+export interface GroupMessage{
+      authorID: {
+        S: string // id of the author of the message
+      },
+      message: {
+        S: string // message text
+      },
+      createdAt: {
+        S: string // unix timestamp when message was sent
       }
+    
 }
+
+
 
 
 

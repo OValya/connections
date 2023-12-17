@@ -1,6 +1,7 @@
 import { createAction, props } from "@ngrx/store"
-import { Group } from "src/app/models/profile.model"
+import { Group, GroupMessage } from "src/app/models/profile.model"
 
 export const loadGroupList = createAction('[Group list] Load all group', props<{groups:Group[]}>())
+export const loadGroupById = createAction('[Group list] Load messages to group chat by ID', props<{messages:GroupMessage[]}>())
 export const selectGroup = createAction('[Group list] select group by ID')
 export const deleteGroup = createAction('[Group list] delete user group')

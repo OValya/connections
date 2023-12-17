@@ -7,3 +7,5 @@ export const DELETE_GROUP = 'https://tasks.app.rs.school/angular/groups/delete?g
 export const PEOPLE = 'https://tasks.app.rs.school/angular/users'
 export const CONVERSATIONS ='https://tasks.app.rs.school/angular/conversations/list'
 export const NEW_CONVERSATION ='https://tasks.app.rs.school/angular/conversations/create'
+export const GROUP_CHAT = 'https://tasks.app.rs.school/angular/groups/read' // ?groupID={:groupID}&since={:since}
+

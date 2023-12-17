@@ -28,8 +28,20 @@ export class ConnectionEffects {
       })
 
     )
-  }
-  )
+  })
+
+  loadGroupMessages$ = createEffect(()=>{
+    return this.actions$.pipe(
+      ofType(ConnectionAPIActions.loadGroupById),
+      mergeMap(({id})=>{
+        return this.groupService.loadGroupChatById(id).pipe(
+          tap(({body})=>console.log('tap load messages', body?.Items! )),
+          map(({body})=> ConnectionActions.loadGroupById({messages:body?.Items!}))
+        )
+      })
+
+    )
+  })
 
     
 }

@@ -6,11 +6,11 @@
   </div>
   <mat-divider></mat-divider>
   <div class="group__main">
-  @for (message of messages; track message) {
+  @for (message of messages$ |async; track message) {
     <div class="message">
-      <p>{{message.createdAt | date}} </p>
-      <p>{{message.authorID}} </p>
-      <p>{{message.message}} </p>
+      <p>{{message.createdAt.S| date}} </p>
+      <p>{{message.authorID.S}} </p>
+      <p>{{message.message.S}} </p>
     </div>
 
   }
