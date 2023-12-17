@@ -75,7 +75,8 @@ export class AuthService {
 
   updateProfile(name:string):Observable<HttpResponse<Profile>>{
     return this.http.put<Profile>(PROFILE, {name}, {observe: 'response'}).
-      pipe(catchError(this.handleError),
+      pipe(
+      catchError(this.handleError),
       tap(()=> this.snakbarService.openSnackBar(`Profile is update with ${name}`)))
   }
   

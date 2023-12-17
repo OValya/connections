@@ -10,8 +10,9 @@ import { SnackBarService } from 'src/app/core/services/snackbar.service';
 import { AuthService } from '../../services/auth.service';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { selectUser } from 'src/app/store/selectors/user.selectors';
-import {getProfile, updateProfile} from 'src/app/store/actions/user.actions'
+import { selectLoading, selectUser } from 'src/app/store/selectors/user.selectors';
+import {getProfile, setLoading, updateProfile} from 'src/app/store/actions/user.actions'
+import { LoadingService } from 'src/app/core/services/loading.service';
 
 @Component({
   selector: 'app-profile',
@@ -21,13 +22,17 @@ import {getProfile, updateProfile} from 'src/app/store/actions/user.actions'
   styleUrl: './profile.component.scss'
 })
 export class ProfileComponent implements  OnInit{
-  readable: boolean = false;
+  editable$: Observable<boolean>;
+  loading$: Observable<boolean>;
   userName:string;
   profile$:Observable<Profile|null>
   name:FormControl<string|null>
 
-  constructor(private snackBar:SnackBarService, private authService:AuthService, private store:Store){
+  constructor(private loadingService:LoadingService, private authService:AuthService, private store:Store){
     this.profile$=this.store.select(selectUser);
+    //this.loading$=this.store.select(selectLoading);
+    this.loading$=this.loadingService.isLoading$;
+    this.editable$=this.loadingService.isEditable$;
     this.profile$.subscribe(profile => {
       this.userName = profile?.name.S!;
       this.name = new FormControl(this.userName, [Validators.required, Validators.maxLength(40), Validators.pattern(/^[a-zA-Z\s]*$/)])
@@ -44,23 +49,19 @@ export class ProfileComponent implements  OnInit{
     })
   }
 
-
-  
-
   editProfile(){
-    this.readable = true;
+    this.loadingService.startEdit();
   }
 
   save(){
-    //this.snackBar.openSnackBar(`New name ${this.name.value} save to your profile!`)
-   // this.profile.name = this.name.value!;
+    this.loadingService.startLoading();
     this.store.dispatch(updateProfile({name:this.name.value!}))
-    this.readable=false;
   }
 
   cancel(){
-    //this.name.setValue({s:''});
-    this.readable=false;
+    this.name.setValue(this.userName);
+    
+    this.loadingService.finishEdit();
   }
 
   logout(){

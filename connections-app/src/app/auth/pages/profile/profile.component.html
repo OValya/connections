@@ -24,11 +24,11 @@
   </div>
   <div class="field">
       <label> Name:
-        <input mat-input [formControl]="name" [readonly]="!readable">
+        <input mat-input [formControl]="name" [readonly]="!(editable$ | async)">
       </label>
    
-    <button mat-flat-button color="primary" *ngIf="!readable" (click)="editProfile()" > edit </button>
-    <button mat-flat-button color="primary" *ngIf="readable" (click)="save()" [disabled]="!name.valid"> save </button>
-    <button mat-flat-button *ngIf="readable" (click)="cancel()"> cancel </button>
+    <button mat-flat-button color="primary" *ngIf="!(editable$ | async)" (click)="editProfile()" > edit </button>
+    <button mat-flat-button color="primary" *ngIf="(editable$ | async)" (click)="save()" [disabled]="!name.valid || (loading$ | async)"> save </button>
+    <button mat-flat-button *ngIf="(editable$ | async)" (click)="cancel()"> cancel </button>
   </div>
 </div>
