@@ -3,7 +3,7 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatIconModule} from '@angular/material/icon';
 import {CommonModule, DatePipe} from '@angular/common';
 import {MatListModule} from '@angular/material/list';
-import { Group } from 'src/app/models/profile.model';
+import { Group, GroupList } from 'src/app/models/profile.model';
 import {MatButtonModule} from '@angular/material/button';
 import { MatDialog, MatDialogConfig, MatDialogModule } from '@angular/material/dialog';
 import { ModalComponent } from '../../components/modal/modal.component';
@@ -19,16 +19,17 @@ import { Router } from '@angular/router';
   styleUrl: './main.component.scss'
 })
 export class MainComponent {
-  groups: Group[] = [
-    {
-      name: 'Group1',
-      createdAt: '2/20/16'
-    },
-    {
-      name: 'Group2',
-      createdAt: '1/18/16'
-    },
-  ];
+  groups: GroupList;
+  //  = [
+  //   {
+  //     name: 'Group1',
+  //     createdAt: '2/20/16'
+  //   },
+  //   {
+  //     name: 'Group2',
+  //     createdAt: '1/18/16'
+  //   },
+  // ];
 
    people: {name:string, chatId?:string}[] = [
      {name: 'Igor',
@@ -62,9 +63,9 @@ export class MainComponent {
 
     const dialogRef = this.dialog.open(ModalComponent, dialogConfig);
 
-     dialogRef.afterClosed().subscribe(
-        data => this.groups.push({name:data, createdAt:'05/05/2023'})
-    );    
+    //  dialogRef.afterClosed().subscribe(
+    //     data => this.groups.push({name:data, createdAt:{S:'05/05/2023'}})
+    // );    
   }
 
 }
