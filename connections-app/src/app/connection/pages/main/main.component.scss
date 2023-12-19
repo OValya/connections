@@ -12,9 +12,9 @@
 
 .buttons{
   padding: 15px;
-  display: flex;
-  justify-content: left;
-  column-gap: 20px;
+  // display: flex;
+  // justify-content: left;
+  // column-gap: 20px;
 }
 
 mat-list-item{
@@ -24,5 +24,10 @@ mat-list-item{
     box-shadow: 5px 5px 5px rgba(187, 117, 206, 0.777), -5px -5px 5px rgba(187, 117, 206, 0.777) ;
     transition: all 0.2s ease;
 }
+}
+
+.timer{
+  width: 50px;
+  height: 20px;
 }
 

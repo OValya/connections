@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map, tap } from 'rxjs';
-import { GROUPS, GROUP_CHAT } from 'src/app/endpoints/endpoints';
-import { GroupList, GroupMessageList } from 'src/app/models/profile.model';
+import { DELETE_GROUP, GROUPS, GROUP_CHAT, NEW_GROUP } from 'src/app/endpoints/endpoints';
+import { Group, GroupList, GroupMessageList } from 'src/app/models/profile.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +20,19 @@ export class GroupsService {
     const options = {params: new HttpParams().set('groupID', id) };
     return this.http.get<GroupMessageList>(GROUP_CHAT, {...options, observe:"response"} ).pipe(
       tap(res => console.log('res', res))
+    )
+  }
+
+  add(name:string):Observable<HttpResponse<{groupID:string}>>{
+    return this.http.post<{groupID:string}>(NEW_GROUP, {name}, {observe:'response'}).pipe(
+      tap(res => console.log('create res', res))
+    )
+  }
+
+  delete(id:string):Observable<HttpResponse<{}>>{
+    const options = {params: new HttpParams().set('groupID', id) };
+    return this.http.delete(DELETE_GROUP, {...options, observe:"response"}).pipe(
+      tap(res => console.log('delete res', res))
     )
   }
 

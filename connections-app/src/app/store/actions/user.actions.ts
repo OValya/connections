@@ -7,6 +7,7 @@ export const loginError = createAction('[Login Page] Login Error', props<{messag
 
 //export const enter = createAction('[Profile Page] enter');
 export const setProfile = createAction('[Profile Page] Set profile ', props<{profile:Profile}>())
+export const setProfileID = createAction('[Main Page] Set profile ID', props<{id:string}>())
 export const setLoading = createAction('[Profile Page] Set Loading ', props<{loading:boolean}>())
 export const getProfile = createAction('[Profile Page] Get profile ')
 export const updateProfile = createAction('[Profile Page] Update profile', props<{name:string}>())

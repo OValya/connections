@@ -43,5 +43,29 @@ export class ConnectionEffects {
     )
   })
 
+   addGroup$ = createEffect(()=>{
+    return this.actions$.pipe(
+      ofType(ConnectionAPIActions.addGroup),
+      mergeMap(({name})=>{
+        return this.groupService.add(name).pipe(
+          tap(({body})=>console.log('tap load group', body?.groupID )),
+          map(({body})=> ConnectionActions.addGroup({group:{id:{S:body?.groupID!}, name:{S:name},createdAt:{S:'25/15/22'},createdBy:{S:'1155588'}}}))
+        )
+      })
+    )
+  })
+
+  deleteGroup$ = createEffect(()=>{
+    return this.actions$.pipe(
+      ofType(ConnectionAPIActions.deleteGroup),
+      mergeMap(({id})=>{
+        return this.groupService.delete(id).pipe(
+          
+          map(()=> ConnectionActions.deleteGroup({id}))
+        )
+      })
+    )
+  })
+
     
 }

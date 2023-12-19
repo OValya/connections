@@ -2,6 +2,7 @@ import { createReducer, on } from "@ngrx/store";
 import {  Group, GroupList, GroupMessage, PeopleList, Profile } from "src/app/models/profile.model"
 import * as ConnectionActions from "../actions/connection.actions";
 import * as ConnectionAPIActions from "../actions/connection-api.actions";
+import { group } from "@angular/animations";
 
 // interface State {
 //   groups:GroupList;
@@ -33,6 +34,8 @@ const initialState:GroupState = {
 
 export const GroupsReducer = createReducer(initialState,
   on(ConnectionActions.loadGroupList, (state, action)=>({...state, groups:action.groups})),
+  on(ConnectionActions.addGroup, (state, action)=> ({...state, groups:[...state.groups, action.group]})),
+  on(ConnectionActions.deleteGroup, (state, action)=> ({...state, groups:state.groups.filter(it => it.id.S != action.id)}))
 )
 
 export interface GroupChatState {
@@ -48,4 +51,5 @@ since:{}
 }
 
 export const GroupChatReducer = createReducer(initialStateGroupChat,
-  on(ConnectionActions.loadGroupById, (state, action)=>({...state, messages:action.messages})))
+  on(ConnectionActions.loadGroupById, (state, action)=>({...state, messages:action.messages})),
+  )
