@@ -14,6 +14,6 @@ export const userReducer = createReducer(initialState,
   on(setProfile, (state, action)=>({...state, profile:action.profile})),
   on(setLoading, (state, action)=>({...state, loading:action.loading})),
   on(removeToken, (state)=>({...state, token:null})),
-  on(updateNameProfile, (state, action)=>({...state, profile:{...state.profile!, name:{S:action.name}}})),
+  on(updateNameProfile, (state, action)=>({...state, profile:{...state.profile!, name:{...state.profile?.name, S:action.name}}})),
 
 )
