@@ -61,6 +61,7 @@ export class MainComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    
      this.groups$.subscribe((data)=>{
       if(data.length===0) this.store.dispatch(ConnectionAPIActions.loadGroupList());
    })
