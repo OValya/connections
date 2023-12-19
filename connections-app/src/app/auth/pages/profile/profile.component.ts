@@ -34,8 +34,9 @@ export class ProfileComponent implements  OnInit{
     this.loading$=this.loadingService.isLoading$;
     this.editable$=this.loadingService.isEditable$;
     this.profile$.subscribe(profile => {
-      this.userName = profile?.name.S!;
-      this.name = new FormControl(this.userName, [Validators.required, Validators.maxLength(40), Validators.pattern(/^[a-zA-Z\s]*$/)])
+      this.userName = profile?.name.S || '';
+      //console.log('username', this.userName)
+      //this.name = new FormControl(this.userName, [Validators.required, Validators.maxLength(40), Validators.pattern(/^[a-zA-Z\s]*$/)])
     })
   }
 
@@ -45,12 +46,13 @@ export class ProfileComponent implements  OnInit{
 
   getProfile(){
     this.profile$.subscribe((data)=>{
-      if(!data) this.store.dispatch(getProfile());
+      if(!data?.email) this.store.dispatch(getProfile());
     })
   }
 
   editProfile(){
     this.loadingService.startEdit();
+    this.name = new FormControl(this.userName, [Validators.required, Validators.maxLength(40), Validators.pattern(/^[a-zA-Z\s]*$/)])
   }
 
   save(){

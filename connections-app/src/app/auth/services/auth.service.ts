@@ -67,8 +67,9 @@ export class AuthService {
   getProfile():Observable<HttpResponse<Profile>>{
     return this.http.get<Profile>(PROFILE, {observe: 'response'}).
       pipe(catchError(this.handleError),
-           tap(()=>{this.snakbarService.openSnackBar('Access is allowed!'); 
-                    this.router.navigate(['/profile'])}
+           tap(()=>{this.snakbarService.openSnackBar('Profile data is loaded!'); 
+                    //this.router.navigate(['/profile'])
+                  }
             ),
       )
   }

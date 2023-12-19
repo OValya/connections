@@ -18,13 +18,16 @@
   </div>
   <div class="field">
     <label> Created at:
-      <span>{{profile.createdAt.S}}</span>
+      <span>{{profile.createdAt.S | date:'medium'}}</span>
     </label>
   </div>
   </div>
   <div class="field">
       <label> Name:
-        <input mat-input [formControl]="name" [readonly]="!(editable$ | async)">
+
+        @if(editable$ | async){<input mat-input [formControl]="name">}
+        @if(!(editable$ | async) && (profile$ | async)){<span>{{(profile$ | async)!.name.S}}</span>}
+        <!-- <input mat-input [formControl]="name" [readonly]="!(editable$ | async)"> -->
       </label>
    
     <button mat-flat-button color="primary" *ngIf="!(editable$ | async)" (click)="editProfile()" > edit </button>

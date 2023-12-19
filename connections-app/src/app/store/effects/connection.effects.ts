@@ -46,10 +46,14 @@ export class ConnectionEffects {
    addGroup$ = createEffect(()=>{
     return this.actions$.pipe(
       ofType(ConnectionAPIActions.addGroup),
-      mergeMap(({name})=>{
-        return this.groupService.add(name).pipe(
-          tap(({body})=>console.log('tap load group', body?.groupID )),
-          map(({body})=> ConnectionActions.addGroup({group:{id:{S:body?.groupID!}, name:{S:name},createdAt:{S:'25/15/22'},createdBy:{S:'1155588'}}}))
+      mergeMap(({nameGroup, id})=>{
+        return this.groupService.add(nameGroup).pipe(
+         // tap(({body})=>console.log('tap load group', body?.groupID )),
+          map(({body})=> ConnectionActions.addGroup({group:{
+            id:{S:body?.groupID!}, 
+            name:{S:nameGroup},
+            createdAt:{S:(Date.now).toString()},
+            createdBy:{S:id}}}))
         )
       })
     )

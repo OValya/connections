@@ -36,16 +36,17 @@ export class MainComponent implements OnInit{
   timmer:number;
 
   userID$: Observable<string>;
+  uid:string;
 
-   people: {name:string, chatId?:string}[] = [
-     {name: 'Igor',
-      chatId: '123',},
-     {name: 'Valya',
-      chatId: '1',},
-     {name: 'Ilya',
-      chatId: '3',},
-     {name: 'mama'},    
-  ];
+  //  people: {name:string, chatId?:string}[] = [
+  //    {name: 'Igor',
+  //     chatId: '123',},
+  //    {name: 'Valya',
+  //     chatId: '1',},
+  //    {name: 'Ilya',
+  //     chatId: '3',},
+  //    {name: 'mama'},    
+  // ];
 
   nameGroup!:string;
 
@@ -56,7 +57,7 @@ export class MainComponent implements OnInit{
     private store:Store){
       this.groups$ = this.store.select(selectAllGroups);
       this.people$ = this.store.select(selectAllPeople);
-      this.userID$ = this.store.select(selectUserID)  
+      this.userID$ = this.store.select(selectUserID) 
   }
 
   ngOnInit(): void {
@@ -71,8 +72,8 @@ export class MainComponent implements OnInit{
 
 
    //todo create service?? for save data to store??
-     const id = localStorage.getItem('uid')!  
-     this.store.dispatch(setProfileID({id}))
+     this.uid = localStorage.getItem('uid')!  
+     this.store.dispatch(setProfileID({id:this.uid}))
 
   }
 
@@ -99,7 +100,7 @@ export class MainComponent implements OnInit{
     const dialogRef = this.dialog.open(ModalComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(data => 
-      {if(data) this.store.dispatch(ConnectionAPIActions.addGroup({name:data}))   }
+      {if(data) this.store.dispatch(ConnectionAPIActions.addGroup({nameGroup:data, id:this.uid}))   }
      )
   }
 
