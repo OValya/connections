@@ -67,5 +67,19 @@ export class ConnectionEffects {
     )
   })
 
+
+  loadPeople$ = createEffect(()=>{
+    return this.actions$.pipe(
+      ofType(ConnectionAPIActions.loadPeopleList),
+      mergeMap(()=>{
+        return this.groupService.loadPeople().pipe(
+          tap(({body})=>console.log('tap load group', body?.Items )),
+          map(({body})=> ConnectionActions.loadPeopleList({people:body?.Items!}))
+        )
+      })
+
+    )
+  })
+
     
 }

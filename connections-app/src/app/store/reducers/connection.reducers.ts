@@ -22,8 +22,6 @@ export interface GroupState{
   count:number,
   groups: Group[],
   people: Profile[],
-
-
 }
 
 const initialState:GroupState = {
@@ -35,7 +33,11 @@ const initialState:GroupState = {
 export const GroupsReducer = createReducer(initialState,
   on(ConnectionActions.loadGroupList, (state, action)=>({...state, groups:action.groups})),
   on(ConnectionActions.addGroup, (state, action)=> ({...state, groups:[...state.groups, action.group]})),
-  on(ConnectionActions.deleteGroup, (state, action)=> ({...state, groups:state.groups.filter(it => it.id.S != action.id)}))
+  on(ConnectionActions.deleteGroup, (state, action)=> ({...state, groups:state.groups.filter(it => it.id.S != action.id)})),
+
+  on(ConnectionActions.loadPeopleList, (state, action)=> ({...state, people:action.people}))
+
+
 )
 
 export interface GroupChatState {

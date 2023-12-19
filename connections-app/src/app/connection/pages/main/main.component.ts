@@ -3,7 +3,7 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatIconModule} from '@angular/material/icon';
 import {CommonModule, DatePipe} from '@angular/common';
 import {MatListModule} from '@angular/material/list';
-import { Group, GroupList, PeopleList } from 'src/app/models/profile.model';
+import { Group, GroupList, PeopleList, Profile } from 'src/app/models/profile.model';
 import {MatButtonModule} from '@angular/material/button';
 import { MatDialog, MatDialogConfig, MatDialogModule } from '@angular/material/dialog';
 import { ModalComponent } from '../../components/modal/modal.component';
@@ -15,7 +15,7 @@ import { Observable, timer, map, takeWhile } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as ConnectionActions from "../../../store/actions/connection.actions";
 import * as ConnectionAPIActions from "../../../store/actions/connection-api.actions";
-import { selectAllGroups } from 'src/app/store/selectors/connection.selectors';
+import { selectAllGroups, selectAllPeople } from 'src/app/store/selectors/connection.selectors';
 import { TimerService } from 'src/app/core/services/timer.service';
 import { selectUserID } from 'src/app/store/selectors/user.selectors';
 import { setProfileID } from 'src/app/store/actions/user.actions';
@@ -30,22 +30,12 @@ import { DeleteModalComponent } from '../../components/delete-modal/delete-modal
 })
 export class MainComponent implements OnInit{
   groups$: Observable<Group[]>;
-  people$: Observable<PeopleList>;
+  people$: Observable<Profile[]>;
   groups: GroupList;
   timer$: Observable<number>
   timmer:number;
 
   userID$: Observable<string>;
-  //  = [
-  //   {
-  //     name: 'Group1',
-  //     createdAt: '2/20/16'
-  //   },
-  //   {
-  //     name: 'Group2',
-  //     createdAt: '1/18/16'
-  //   },
-  // ];
 
    people: {name:string, chatId?:string}[] = [
      {name: 'Igor',
@@ -65,6 +55,7 @@ export class MainComponent implements OnInit{
     private router:Router, 
     private store:Store){
       this.groups$ = this.store.select(selectAllGroups);
+      this.people$ = this.store.select(selectAllPeople);
       this.userID$ = this.store.select(selectUserID)  
   }
 
@@ -72,6 +63,12 @@ export class MainComponent implements OnInit{
      this.groups$.subscribe((data)=>{
       if(data.length===0) this.store.dispatch(ConnectionAPIActions.loadGroupList());
    })
+
+    this.people$.subscribe((data)=>{
+      if(data.length===0) this.store.dispatch(ConnectionAPIActions.loadPeopleList());
+   })
+
+
 
    //todo create service?? for save data to store??
      const id = localStorage.getItem('uid')!  
@@ -82,13 +79,12 @@ export class MainComponent implements OnInit{
  
 
 
-  updateGroup(){
+  updateGroup(){ //todo disable button
    // this.store.dispatch(ConnectionAPIActions.loadGroupList());
     this.timerService.startTimer();
     this.timer$ = this.timerService.getTimer()
     this.timer$.subscribe(time => {this.timmer = time; console.log('timer', this.timmer)})
-    //this.router.navigate(['group/1'])
-
+    
   }
 
 
@@ -103,22 +99,13 @@ export class MainComponent implements OnInit{
     const dialogRef = this.dialog.open(ModalComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(data => 
-      {if(data) //console.log('modal data', data)}
-          //const group = {id:{S:body?.groupID!}, name:{S:'valentine group'},createdAt:{S:'25/15/22'},createdBy:{S:'1155588'}}
-          this.store.dispatch(ConnectionAPIActions.addGroup({name:data}))   }
+      {if(data) this.store.dispatch(ConnectionAPIActions.addGroup({name:data}))   }
      )
   }
 
   deleteGroup(id:string){
 
-    //  const dialogConfig = new MatDialogConfig();
-    //  dialogConfig.disableClose = true;
-    //  dialogConfig.autoFocus = true;
-    //  dialogConfig.data = {
-    //    name: ''
-    // };
-
-    const dialogRef = this.dialog.open(DeleteModalComponent, {disableClose:true})//, dialogConfig);
+    const dialogRef = this.dialog.open(DeleteModalComponent, {disableClose:true})
 
     dialogRef.afterClosed().subscribe(data => 
       {if(data) this.store.dispatch(ConnectionAPIActions.deleteGroup({id}))}         

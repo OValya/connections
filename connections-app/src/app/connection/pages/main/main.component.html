@@ -28,10 +28,10 @@
     <mat-divider></mat-divider>
     <mat-list>
       <div mat-subheader>People</div>
-      @for (person of people; track person) {
+      @for (person of (people$ | async); track person) {
       <mat-list-item>
         <mat-icon matListItemIcon>people</mat-icon>
-        <div matListItemTitle>{{person.name}}</div>
+        <div matListItemTitle>{{person.name.S}}</div>
         
       </mat-list-item>
       }

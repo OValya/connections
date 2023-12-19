@@ -6,3 +6,4 @@ export const loadGroupById = createAction('[Group list API] Load group by ID', p
 export const addGroup = createAction('[Group list API] Add group', props<{name:string}>())
 export const deleteGroup = createAction('[Group list API] Delete group', props<{id:string}>())
 
+export const loadPeopleList = createAction('[People list API] Load all people')

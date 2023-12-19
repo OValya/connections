@@ -9,9 +9,17 @@ export const selectAllGroups = createSelector(
   (state)=> state.groups
 )
 
+export const selectAllPeople = createSelector(
+  GroupsSelector,
+  (state)=>state.people
+)
+
 export const GroupMessagesSelector = createFeatureSelector<GroupChatState>('messages');
 
 export const selectMessagesByGroupId = createSelector(
   GroupMessagesSelector,
   (state)=> state.messages
 )
+
+
+ 
