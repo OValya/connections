@@ -1,37 +1,42 @@
 <div class="page">
-  <button mat-flat-button color="primary" (click)="logout()">logout</button>
-  <div mat-subheader>Profile</div>
-  <div *ngIf="(profile$ | async) as profile">
+  <div class="content">
+    <button class="logout" mat-flat-button color="primary" (click)="logout()">logout</button>
+    <mat-list>
+      <h2><mat-icon matListItemIcon>person</mat-icon> Profile</h2>
+      <div *ngIf="(profile$ | async) as profile">
+        <mat-list-item>
+<!--           
+          <div matListItemTitle>User's ID</div>
+          <div matListItemLine>{{profile.uid.S }}</div> -->
+          <label > User's ID:</label>
+            <span>{{profile.uid.S}}</span>
+          
+        </mat-list-item>
+        <mat-list-item>
+          <label> Email:</label>
+            <span>{{profile.email.S}}</span>
+          
+        </mat-list-item>
+        <mat-list-item>
+          <label> Created at:</label>
+            <span>{{profile.createdAt.S | date:'medium'}}</span>
+          
+        </mat-list-item>
+        </div>
+      <mat-list-item>
+          <label> Name: </label>
 
-  
-
-  <div class="field">
-   <label > User's ID:
-    <span>{{profile.uid.S}}</span>
-   </label>
+            @if(editable$ | async){<input mat-input [formControl]="name">}
+            @if(!(editable$ | async) && (profile$ | async)){<span>{{(profile$ | async)!.name.S}}</span>}
+            <!-- <input mat-input [formControl]="name" [readonly]="!(editable$ | async)"> -->
+         
       
-  </div>
-  <div class="field">
-    <label> Email:
-      <span>{{profile.email.S}}</span>
-    </label>
-  </div>
-  <div class="field">
-    <label> Created at:
-      <span>{{profile.createdAt.S | date:'medium'}}</span>
-    </label>
-  </div>
-  </div>
-  <div class="field">
-      <label> Name:
-
-        @if(editable$ | async){<input mat-input [formControl]="name">}
-        @if(!(editable$ | async) && (profile$ | async)){<span>{{(profile$ | async)!.name.S}}</span>}
-        <!-- <input mat-input [formControl]="name" [readonly]="!(editable$ | async)"> -->
-      </label>
-   
-    <button mat-flat-button color="primary" *ngIf="!(editable$ | async)" (click)="editProfile()" > edit </button>
-    <button mat-flat-button color="primary" *ngIf="(editable$ | async)" (click)="save()" [disabled]="!name.valid || (loading$ | async)"> save </button>
-    <button mat-flat-button *ngIf="(editable$ | async)" (click)="cancel()"> cancel </button>
-  </div>
+        <button mat-flat-button color="primary" *ngIf="!(editable$ | async)" (click)="editProfile()" > edit </button>
+        <button mat-flat-button color="primary" *ngIf="(editable$ | async)" (click)="save()" [disabled]="!name.valid || (loading$ | async)"> save </button>
+        <button mat-flat-button *ngIf="(editable$ | async)" (click)="cancel()"> cancel </button>
+      </mat-list-item>
+      
+    </mat-list>
+    </div>
+  
 </div>

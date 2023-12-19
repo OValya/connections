@@ -13,11 +13,12 @@ import { Store, select } from '@ngrx/store';
 import { selectLoading, selectUser } from 'src/app/store/selectors/user.selectors';
 import {getProfile, setLoading, updateProfile} from 'src/app/store/actions/user.actions'
 import { LoadingService } from 'src/app/core/services/loading.service';
+import {MatListModule} from '@angular/material/list';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, FormsModule, MatListModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatIconModule, MatButtonModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
