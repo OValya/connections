@@ -8,7 +8,7 @@
   <div class="group__main">
   @for (message of messages$ |async; track message) {
     <div class="message">
-      <p>{{message.createdAt.S| date}} </p>
+      <p>{{message.createdAt.S| date:'medium'}} </p>
       <p>{{message.authorID.S}} </p>
       <p>{{message.message.S}} </p>
     </div>

@@ -9,7 +9,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule} from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { selectMessagesByGroupId } from 'src/app/store/selectors/connection.selectors';
 import {loadGroupById} from '../../../store/actions/connection-api.actions'
 @Component({
@@ -25,6 +25,9 @@ export class GroupDialogComponent implements OnInit {
   constructor(private route:ActivatedRoute, private store:Store){
     this.id = this.route.snapshot.params['id']
     this.messages$ = this.store.select(selectMessagesByGroupId)
+    .pipe(
+      map((items)=> items.slice().sort((a, b) => +a.createdAt.S - +b.createdAt.S)),
+       )
   }
 
   ngOnInit(){

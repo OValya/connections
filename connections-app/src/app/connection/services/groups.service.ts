@@ -19,7 +19,7 @@ export class GroupsService {
   loadGroupChatById(id:string, since?:string):Observable<HttpResponse<GroupMessageList>>{
     const options = {params: new HttpParams().set('groupID', id) };
     return this.http.get<GroupMessageList>(GROUP_CHAT, {...options, observe:"response"} ).pipe(
-      tap(res => console.log('res', res))
+      tap(res => console.log('messages', res))
     )
   }
 
