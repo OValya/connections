@@ -35,21 +35,22 @@ export class ProfileComponent implements  OnInit{
     this.loading$=this.loadingService.isLoading$;
     this.editable$=this.loadingService.isEditable$;
     this.profile$.subscribe(profile => {
-      this.userName = profile?.name.S || '';
+      this.userName = profile !== null ? profile.name.S : '';
       //console.log('username', this.userName)
       //this.name = new FormControl(this.userName, [Validators.required, Validators.maxLength(40), Validators.pattern(/^[a-zA-Z\s]*$/)])
     })
   }
 
   ngOnInit(): void {
-    this.getProfile();  
+    this.store.dispatch(getProfile())
+    //this.getProfile();
   }
 
-  getProfile(){
-    this.profile$.subscribe((data)=>{
-      if(!data?.email) this.store.dispatch(getProfile());
-    })
-  }
+  // getProfile(){
+  //   this.profile$.subscribe((data)=>{
+  //     if(!data?.email) ;
+  //   })
+  // }
 
   editProfile(){
     this.loadingService.startEdit();
@@ -63,7 +64,7 @@ export class ProfileComponent implements  OnInit{
 
   cancel(){
     this.name.setValue(this.userName);
-    
+
     this.loadingService.finishEdit();
   }
 

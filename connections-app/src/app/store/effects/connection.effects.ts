@@ -22,7 +22,7 @@ export class ConnectionEffects {
       ofType(ConnectionAPIActions.loadGroupList),
       mergeMap(()=>{
         return this.groupService.all().pipe(
-          tap(({body})=>console.log('tap load group', body?.Items! )),
+         // tap(({body})=>console.log('tap load group', body?.Items! )),
           map(({body})=> ConnectionActions.loadGroupList({groups:body?.Items!}))
         )
       })
@@ -35,7 +35,7 @@ export class ConnectionEffects {
       ofType(ConnectionAPIActions.loadGroupById),
       mergeMap(({id})=>{
         return this.groupService.loadGroupChatById(id).pipe(
-          tap(({body})=>console.log('tap load messages', body?.Items! )),
+        //  tap(({body})=>console.log('tap load messages', body?.Items! )),
           map(({body})=> ConnectionActions.loadGroupById({messages:body?.Items!}))
         )
       })
@@ -77,7 +77,7 @@ export class ConnectionEffects {
       ofType(ConnectionAPIActions.loadPeopleList),
       mergeMap(()=>{
         return this.groupService.loadPeople().pipe(
-          tap(({body})=>console.log('tap load group', body?.Items )),
+          //tap(({body})=>console.log('tap load group', body?.Items )),
           map(({body})=> ConnectionActions.loadPeopleList({people:body?.Items!}))
         )
       })

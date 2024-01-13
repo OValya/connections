@@ -5,38 +5,39 @@
       <h2><mat-icon matListItemIcon>person</mat-icon> Profile</h2>
       <div *ngIf="(profile$ | async) as profile">
         <mat-list-item>
-<!--           
+<!--
           <div matListItemTitle>User's ID</div>
           <div matListItemLine>{{profile.uid.S }}</div> -->
           <label > User's ID:</label>
             <span>{{profile.uid.S}}</span>
-          
+
         </mat-list-item>
         <mat-list-item>
           <label> Email:</label>
             <span>{{profile.email.S}}</span>
-          
+
         </mat-list-item>
         <mat-list-item>
           <label> Created at:</label>
             <span>{{profile.createdAt.S | date:'medium'}}</span>
-          
+
         </mat-list-item>
-        </div>
+
       <mat-list-item>
           <label> Name: </label>
 
             @if(editable$ | async){<input mat-input [formControl]="name">}
-            @if(!(editable$ | async) && (profile$ | async)){<span>{{(profile$ | async)!.name.S}}</span>}
+<!--            @if(!(editable$ | async) && (profile$ | async)!.name!.S){<span>{{(profile$ | async)!.name.S}}</span>}-->
+            @if(!(editable$ | async) && profile.name.S){<span>{{profile.name.S}}</span>}
             <!-- <input mat-input [formControl]="name" [readonly]="!(editable$ | async)"> -->
-         
-      
+
+
         <button mat-flat-button color="primary" *ngIf="!(editable$ | async)" (click)="editProfile()" > edit </button>
         <button mat-flat-button color="primary" *ngIf="(editable$ | async)" (click)="save()" [disabled]="!name.valid || (loading$ | async)"> save </button>
         <button mat-flat-button *ngIf="(editable$ | async)" (click)="cancel()"> cancel </button>
       </mat-list-item>
-      
+      </div>
     </mat-list>
     </div>
-  
+
 </div>
