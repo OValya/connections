@@ -45,23 +45,23 @@ export class MainComponent implements OnInit{
   //     chatId: '1',},
   //    {name: 'Ilya',
   //     chatId: '3',},
-  //    {name: 'mama'},    
+  //    {name: 'mama'},
   // ];
 
   nameGroup!:string;
 
-  constructor(public dialog:MatDialog, 
+  constructor(public dialog:MatDialog,
     private timerService:TimerService,
-    private groupService: GroupsService, 
-    private router:Router, 
+    private groupService: GroupsService,
+    private router:Router,
     private store:Store){
       this.groups$ = this.store.select(selectAllGroups);
       this.people$ = this.store.select(selectAllPeople);
-      this.userID$ = this.store.select(selectUserID) 
+      this.userID$ = this.store.select(selectUserID)
   }
 
   ngOnInit(): void {
-    
+
      this.groups$.subscribe((data)=>{
       if(data.length===0) this.store.dispatch(ConnectionAPIActions.loadGroupList());
    })
@@ -73,12 +73,12 @@ export class MainComponent implements OnInit{
 
 
    //todo create service?? for save data to store??
-     this.uid = localStorage.getItem('uid')!  
+     this.uid = localStorage.getItem('uid')!
      this.store.dispatch(setProfileID({id:this.uid}))
 
   }
 
- 
+
 
 
   updateGroup(){ //todo disable button
@@ -86,7 +86,7 @@ export class MainComponent implements OnInit{
     this.timerService.startTimer();
     this.timer$ = this.timerService.getTimer()
     this.timer$.subscribe(time => {this.timmer = time; console.log('timer', this.timmer)})
-    
+
   }
 
 
@@ -100,17 +100,19 @@ export class MainComponent implements OnInit{
 
     const dialogRef = this.dialog.open(ModalComponent, dialogConfig);
 
-    dialogRef.afterClosed().subscribe(data => 
+    dialogRef.afterClosed().subscribe(data =>
       {if(data) this.store.dispatch(ConnectionAPIActions.addGroup({nameGroup:data, id:this.uid}))   }
      )
   }
 
-  deleteGroup(id:string){
+  deleteGroup(id:string, e:Event){
+    e.stopPropagation();
+
 
     const dialogRef = this.dialog.open(DeleteModalComponent, {disableClose:true})
 
-    dialogRef.afterClosed().subscribe(data => 
-      {if(data) this.store.dispatch(ConnectionAPIActions.deleteGroup({id}))}         
+    dialogRef.afterClosed().subscribe(data =>
+      {if(data) this.store.dispatch(ConnectionAPIActions.deleteGroup({id}))}
     )
   }
 

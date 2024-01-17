@@ -35,7 +35,7 @@ export class ProfileComponent implements  OnInit{
     this.loading$=this.loadingService.isLoading$;
     this.editable$=this.loadingService.isEditable$;
     this.profile$.subscribe(profile => {
-      this.userName = profile !== null ? profile.name.S : '';
+      this.userName = profile?.name !== undefined ? profile.name.S : '';
       //console.log('username', this.userName)
       //this.name = new FormControl(this.userName, [Validators.required, Validators.maxLength(40), Validators.pattern(/^[a-zA-Z\s]*$/)])
     })

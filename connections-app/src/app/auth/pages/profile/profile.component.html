@@ -9,17 +9,16 @@
           <div matListItemTitle>User's ID</div>
           <div matListItemLine>{{profile.uid.S }}</div> -->
           <label > User's ID:</label>
-            <span>{{profile.uid.S}}</span>
+            @if(profile.uid){<span>{{profile.uid.S}}</span>}
 
         </mat-list-item>
         <mat-list-item>
-          <label> Email:</label>
-            <span>{{profile.email.S}}</span>
+          @if(profile.email){<span>{{profile.email.S}}</span>}
 
         </mat-list-item>
         <mat-list-item>
           <label> Created at:</label>
-            <span>{{profile.createdAt.S | date:'medium'}}</span>
+            @if(profile.createdAt){<span>{{profile.createdAt.S | date:'medium'}}</span>}
 
         </mat-list-item>
 
@@ -28,7 +27,7 @@
 
             @if(editable$ | async){<input mat-input [formControl]="name">}
 <!--            @if(!(editable$ | async) && (profile$ | async)!.name!.S){<span>{{(profile$ | async)!.name.S}}</span>}-->
-            @if(!(editable$ | async) && profile.name.S){<span>{{profile.name.S}}</span>}
+            @if(!(editable$ | async) && profile.name){<span>{{profile.name.S}}</span>}
             <!-- <input mat-input [formControl]="name" [readonly]="!(editable$ | async)"> -->
 
 

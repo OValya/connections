@@ -1,22 +1,39 @@
 <div class="page">
   <div class="group">
     <div class="buttons">
-       <button mat-stroked-button (click)="updateGroup()"> update</button> 
+       <button mat-stroked-button (click)="updateGroup()"> update</button>
        <!-- <div class="timer">{{timmer}}</div> -->
-       <button mat-flat-button color="primary" (click)="openDialog()"> create</button> 
+       <button mat-flat-button color="primary" (click)="openDialog()"> create</button>
     </div>
     <mat-divider></mat-divider>
     <mat-list>
     <div mat-subheader>Chats</div>
     @for (group of groups$ |async; track group) {
-    
+
       <mat-list-item style="cursor: pointer" >
         <mat-icon style="color: blueviolet;" matListItemIcon>chat</mat-icon>
-        <div routerLink="/group/{{group.id.S}}" matListItemTitle>{{group.name.S}}</div>
+
+        <div routerLink="/group/{{group.id.S}}" matListItemTitle>
+          {{group.name.S}}
+          @if((userID$ | async) === group.createdBy.S) {
+            <button mat-icon-button color="primary" (click)="deleteGroup(group.id.S, $event)">
+              <mat-icon>
+                delete
+              </mat-icon>
+            </button>
+          }
+
+        </div>
         <div matListItemLine>{{group.createdAt.S| date}}</div>
-        @if((userID$ | async) === group.createdBy.S) {<button mat-icon-button color="primary" (click)="deleteGroup(group.id.S)"><mat-icon>delete</mat-icon> </button>}
+<!--        @if((userID$ | async) === group.createdBy.S) {-->
+<!--          <button mat-icon-button color="primary" (click)="deleteGroup(group.id.S)">-->
+<!--            <mat-icon>-->
+<!--              delete-->
+<!--            </mat-icon> -->
+<!--          </button>-->
+<!--        }-->
       </mat-list-item>
-    
+
     }
     </mat-list>
   </div>
@@ -32,7 +49,7 @@
       <mat-list-item>
         <mat-icon matListItemIcon>people</mat-icon>
         <div matListItemTitle>{{person.name.S}}</div>
-        
+
       </mat-list-item>
       }
     </mat-list>
