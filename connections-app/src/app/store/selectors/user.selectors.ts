@@ -6,6 +6,7 @@ import { UserState } from "../connections.state";
 const userFeature = createFeatureSelector<UserState>('user');
 
 export const selectUser = createSelector(userFeature, (state)=>state.profile)
+export const selectUserName = createSelector(userFeature, (state)=>state.profile?.name)
 export const selectUserID = createSelector(userFeature, (state)=>state.profile?.uid.S!)
 export const selectLoaded = createSelector(userFeature, (state)=>state.loaded)
 export const selectLoading = createSelector(userFeature, (state)=>state.loading)

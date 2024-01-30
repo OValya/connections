@@ -10,10 +10,10 @@
     <div mat-subheader>Chats</div>
     @for (group of groups$ |async; track group) {
 
-      <mat-list-item style="cursor: pointer" >
+      <mat-list-item style="cursor: pointer" (click)="selectGroupChat(group.id.S)">
         <mat-icon style="color: blueviolet;" matListItemIcon>chat</mat-icon>
 
-        <div routerLink="/group/{{group.id.S}}" matListItemTitle>
+        <div  matListItemTitle>
           {{group.name.S}}
           @if((userID$ | async) === group.createdBy.S) {
             <button mat-icon-button color="primary" (click)="deleteGroup(group.id.S, $event)">

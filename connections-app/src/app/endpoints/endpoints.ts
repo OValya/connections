@@ -8,4 +8,5 @@ export const PEOPLE = 'https://tasks.app.rs.school/angular/users'
 export const CONVERSATIONS ='https://tasks.app.rs.school/angular/conversations/list'
 export const NEW_CONVERSATION ='https://tasks.app.rs.school/angular/conversations/create'
 export const GROUP_CHAT = 'https://tasks.app.rs.school/angular/groups/read' // ?groupID={:groupID}&since={:since}
+export const SEND_MESSAGE_GROUP_CHAT = 'https://tasks.app.rs.school/angular/groups/append' // ?groupID={:groupID}&since={:since}
 

@@ -20,6 +20,7 @@ import { TimerService } from 'src/app/core/services/timer.service';
 import { selectUserID } from 'src/app/store/selectors/user.selectors';
 import { setProfileID } from 'src/app/store/actions/user.actions';
 import { DeleteModalComponent } from '../../components/delete-modal/delete-modal.component';
+import {loadGroupById} from "../../../store/actions/connection-api.actions";
 
 @Component({
   selector: 'app-main',
@@ -32,21 +33,12 @@ export class MainComponent implements OnInit{
   groups$: Observable<Group[]>;
   people$: Observable<Profile[]>;
   groups: GroupList;
+
   timer$: Observable<number>
-  timmer:number;
+  timer: number;
 
   userID$: Observable<string>;
   uid:string;
-
-  //  people: {name:string, chatId?:string}[] = [
-  //    {name: 'Igor',
-  //     chatId: '123',},
-  //    {name: 'Valya',
-  //     chatId: '1',},
-  //    {name: 'Ilya',
-  //     chatId: '3',},
-  //    {name: 'mama'},
-  // ];
 
   nameGroup!:string;
 
@@ -85,7 +77,7 @@ export class MainComponent implements OnInit{
    // this.store.dispatch(ConnectionAPIActions.loadGroupList());
     this.timerService.startTimer();
     this.timer$ = this.timerService.getTimer()
-    this.timer$.subscribe(time => {this.timmer = time; console.log('timer', this.timmer)})
+    this.timer$.subscribe(time => {this.timer = time; console.log('timer', this.timer)})
 
   }
 
@@ -97,9 +89,7 @@ export class MainComponent implements OnInit{
      dialogConfig.data = {
        name: ''
     };
-
     const dialogRef = this.dialog.open(ModalComponent, dialogConfig);
-
     dialogRef.afterClosed().subscribe(data =>
       {if(data) this.store.dispatch(ConnectionAPIActions.addGroup({nameGroup:data, id:this.uid}))   }
      )
@@ -107,13 +97,16 @@ export class MainComponent implements OnInit{
 
   deleteGroup(id:string, e:Event){
     e.stopPropagation();
-
-
     const dialogRef = this.dialog.open(DeleteModalComponent, {disableClose:true})
-
     dialogRef.afterClosed().subscribe(data =>
       {if(data) this.store.dispatch(ConnectionAPIActions.deleteGroup({id}))}
     )
+  }
+
+  selectGroupChat(groupID:string){
+    this.store.dispatch(ConnectionActions.setActiveChatId({groupID}))
+    this.store.dispatch(ConnectionAPIActions.loadGroupById({groupID}))
+    this.router.navigate(['group', groupID]);
   }
 
 }

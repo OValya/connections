@@ -11,6 +11,7 @@ export class SnackBarService {
   constructor(private snackbar:MatSnackBar) { }
 
   openSnackBar(message: string){
-    this.snackbar.open(message, 'I got it!', {duration:3000})
+    this.snackbar.open(message, 'I got it!', {duration:5000})
   }
 }
+

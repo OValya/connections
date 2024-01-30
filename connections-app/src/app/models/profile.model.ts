@@ -59,7 +59,11 @@ export interface GroupMessage{
       createdAt: {
         S: string // unix timestamp when message was sent
       }
-    
+}
+
+export  interface GroupMessageWithName{
+  message:GroupMessage;
+  authorName:string
 }
 
 

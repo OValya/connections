@@ -2,7 +2,14 @@ import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angula
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, tap, throwError } from 'rxjs';
 import { SnackBarService } from 'src/app/core/services/snackbar.service';
-import { DELETE_GROUP, GROUPS, GROUP_CHAT, NEW_GROUP, PEOPLE } from 'src/app/endpoints/endpoints';
+import {
+  DELETE_GROUP,
+  GROUPS,
+  GROUP_CHAT,
+  NEW_GROUP,
+  PEOPLE,
+  SEND_MESSAGE_GROUP_CHAT
+} from 'src/app/endpoints/endpoints';
 import { Group, GroupList, GroupMessageList, PeopleList, Profile } from 'src/app/models/profile.model';
 
 @Injectable({
@@ -26,6 +33,13 @@ export class GroupsService {
     )
   }
 
+  sendMessageToGroup(message:string, groupID:string):Observable<HttpResponse<{}>>{
+    return this.http.post(SEND_MESSAGE_GROUP_CHAT, {message, groupID}, {observe:'response'}).pipe(
+      catchError(this.handleError),
+      tap(()=> this.snackbarService.openSnackBar('Your message is send'))
+    )
+  }
+
   add(name:string):Observable<HttpResponse<{groupID:string}>>{
     return this.http.post<{groupID:string}>(NEW_GROUP, {name}, {observe:'response'}).pipe(
       catchError(this.handleError),
@@ -46,13 +60,13 @@ export class GroupsService {
       catchError(this.handleError),
       tap(()=> this.snackbarService.openSnackBar(`Loading people is success!`)))
   }
-  
-  
-  
+
+
+
   private handleError = (error: HttpErrorResponse) => {
-    this.snackbarService.openSnackBar(error.error.message);  
+    this.snackbarService.openSnackBar(error.error.message);
     return throwError(() => error.message);
   }
-   
+
 
 }

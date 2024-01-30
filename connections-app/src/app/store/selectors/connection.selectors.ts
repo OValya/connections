@@ -16,10 +16,14 @@ export const selectAllPeople = createSelector(
 
 export const GroupMessagesSelector = createFeatureSelector<GroupChatState>('messages');
 
+export const selectActiveGroupID = createSelector(
+  GroupMessagesSelector,
+  state => state.activeChatID
+)
 export const selectMessagesByGroupId = createSelector(
   GroupMessagesSelector,
-  (state)=> state.messages
+  selectActiveGroupID,
+  (state, groupID)=> state.chats[groupID]
 )
 
 
- 

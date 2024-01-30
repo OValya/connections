@@ -16,10 +16,10 @@ interface AuthResponse {
 export class AuthService {
   isLoggedIn:boolean;
   isLoggedin$: BehaviorSubject<boolean>;
-  
-  
+
+
   constructor(private http:HttpClient, private snakbarService:SnackBarService, private router:Router) {
-    this.isLoggedIn=localStorage.getItem('token')?true:false;
+    this.isLoggedIn=localStorage.getItem('token')? true : false;
     this.isLoggedin$ = new BehaviorSubject(this.isLoggedIn);
    }
 
@@ -27,7 +27,7 @@ export class AuthService {
   registration(name:string, email:string, password:string):Observable<HttpResponse<AuthResponse>>{
     return this.http.post<AuthResponse>(REGISTRATION, {email, name, password}, {observe: 'response', headers:{skip:"true"}}).
     pipe(catchError(this.handleError),
-           tap(()=>{this.snakbarService.openSnackBar('Success!'); 
+           tap(()=>{this.snakbarService.openSnackBar('Success!');
                     this.router.navigate(['/signin'])}
             ))
   }
@@ -41,14 +41,14 @@ export class AuthService {
                   localStorage.setItem('token', body?.token!);
                   localStorage.setItem('uid', body?.uid!);
                   this.router.navigate(['/']);
-                 
-                  this.snakbarService.openSnackBar('Success!'); 
+
+                  this.snakbarService.openSnackBar('Success!');
                   }
             )
         )
   }
 
-  logout(): void {  
+  logout(): void {
     this.isLoggedIn = false;
     this.isLoggedin$.next(false);
     localStorage.removeItem('token');
@@ -67,7 +67,7 @@ export class AuthService {
   getProfile():Observable<HttpResponse<Profile>>{
     return this.http.get<Profile>(PROFILE, {observe: 'response'}).
       pipe(catchError(this.handleError),
-           tap(()=>{this.snakbarService.openSnackBar('Profile data is loaded!'); 
+           tap(()=>{this.snakbarService.openSnackBar('Profile data is loaded!');
                     //this.router.navigate(['/profile'])
                   }
             ),
@@ -80,11 +80,12 @@ export class AuthService {
       catchError(this.handleError),
       tap(()=> this.snakbarService.openSnackBar(`Profile is update with ${name}`)))
   }
-  
-  
-  
+
+
+
   private handleError = (error: HttpErrorResponse) => {
-    this.snakbarService.openSnackBar(error.error.message);  
+    console.log('error disconect:', error)
+    this.snakbarService.openSnackBar(error.message);
     return throwError(() => error.message);
   }
 
