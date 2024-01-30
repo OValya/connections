@@ -2,7 +2,7 @@
   <div class="group__header">
     <a routerLink="/"><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="arrow_back"></mat-icon></a>
     <button mat-flat-button color="primary">update</button>
-    <button mat-flat-button>delete</button>
+    <button mat-flat-button (click)="deleteGroup()">delete</button>
   </div>
   <mat-divider></mat-divider>
   <div class="group__main">

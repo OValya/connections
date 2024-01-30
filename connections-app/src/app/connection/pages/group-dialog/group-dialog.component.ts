@@ -7,11 +7,15 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule} from '@angular/forms';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import { Store } from '@ngrx/store';
 import {Observable, map, tap, combineLatestAll, combineLatest} from 'rxjs';
-import {selectAllPeople, selectMessagesByGroupId} from 'src/app/store/selectors/connection.selectors';
-import {loadGroupById} from '../../../store/actions/connection-api.actions'
+import {
+  selectActiveGroupID,
+  selectAllPeople,
+  selectMessagesByGroupId
+} from 'src/app/store/selectors/connection.selectors';
+import {deleteGroup} from '../../../store/actions/connection-api.actions'
 import {setActiveChatId} from "../../../store/actions/connection.actions";
 import {selectUser} from "../../../store/selectors/user.selectors";
 @Component({
@@ -22,13 +26,13 @@ import {selectUser} from "../../../store/selectors/user.selectors";
   styleUrl: './group-dialog.component.scss'
 })
 export class GroupDialogComponent implements OnInit {
-  groupID:string;
+  groupID$:Observable<string>;
   messages$:Observable<GroupMessage[]>;
   namedMessage$:Observable<GroupMessageWithName[]>;
   messages:GroupMessage[];
   users$: Observable<Profile[]>;
-  constructor(private route:ActivatedRoute, private store:Store){
-    //this.groupID = this.route.snapshot.params['id']  //select
+  constructor(private router:Router, private store:Store){
+    this.groupID$ = this.store.select(selectActiveGroupID)//this.route.snapshot.params['id']  //select
     this.messages$ = this.store.select(selectMessagesByGroupId);
     this.users$ = this.store.select(selectAllPeople)
     // this.namedMessage$ = combineLatest([this.messages$, this.users$]).pipe(
@@ -51,10 +55,10 @@ export class GroupDialogComponent implements OnInit {
   }
 
   ngOnInit(){
-    this.messages$.subscribe(
-      (items)=> this.messages =
-        items? items.slice().sort((a, b) => +a.createdAt.S - +b.createdAt.S):[]
-    )
+    // this.messages$.subscribe(
+    //   (items)=> this.messages =
+    //     items? items.slice().sort((a, b) => +a.createdAt.S - +b.createdAt.S):[]
+    // )
 
     this.namedMessage$ = combineLatest([this.messages$, this.users$]).pipe(
       map(([messages, users])=> {
@@ -70,7 +74,7 @@ export class GroupDialogComponent implements OnInit {
 
 
 
-    this.namedMessage$.subscribe(items => console.log(items))
+   // this.namedMessage$.subscribe(items => console.log(items))
 
     //this.store.dispatch(setActiveChatId({groupID:this.groupID}))
     //this.store.dispatch(loadGroupById({groupID:this.groupID}))
@@ -80,6 +84,11 @@ export class GroupDialogComponent implements OnInit {
     //     map((items)=> items.slice().sort((a, b) => +a.createdAt.S - +b.createdAt.S)),
     //   )
 
+  }
+
+  deleteGroup(){
+    this.groupID$.subscribe(groupId => this.store.dispatch(deleteGroup({id:groupId})))
+    this.router.navigate(['/'])
   }
 
 
