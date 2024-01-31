@@ -19,8 +19,8 @@
   <form class="message-form">
     <mat-form-field class="input-message">
       <mat-label>Type your message</mat-label>
-      <input matInput placeholder="hello...">
-      <button matSuffix mat-icon-button color="primary" aria-label="button for send message">
+      <input matInput placeholder="type your message" #newMessage >
+      <button matSuffix mat-icon-button color="primary" aria-label="button for send message" (click)="sendMessage(newMessage.value)">
         <mat-icon>send</mat-icon>
       </button>
     </mat-form-field>

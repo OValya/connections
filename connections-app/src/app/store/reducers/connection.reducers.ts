@@ -56,6 +56,6 @@ const initialStateGroupChat:GroupChatState = {
 
 export const GroupChatReducer = createReducer(initialStateGroupChat,
   on(ConnectionActions.loadGroupById, (state, action)=>({...state, chats:{...state.chats, [action.groupID]:action.messages}})),
-  //on(ConnectionActions.addMessageToGroup, (state, action)=>({...state, {...chats[action.groupID],  :}))
+  //on(ConnectionActions.addMessageToGroup, (state, action)=>({...state, chats:{...state.chats, [action.groupID]:state.chats[action.groupID].push({message:action.message, createdAt:Date.now().toString(),  })),
   on(ConnectionActions.setActiveChatId, (state, action)=>({...state, activeChatID:action.groupID }))
   )

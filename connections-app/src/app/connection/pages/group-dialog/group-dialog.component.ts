@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {CommonModule, DatePipe} from '@angular/common';
 import {GroupMessage, GroupMessageWithName, Message, Profile} from 'src/app/models/profile.model';
 import {MatDividerModule} from '@angular/material/divider';
@@ -15,9 +15,9 @@ import {
   selectAllPeople,
   selectMessagesByGroupId
 } from 'src/app/store/selectors/connection.selectors';
-import {deleteGroup} from '../../../store/actions/connection-api.actions'
+import {deleteGroup, addMessageToGroup} from '../../../store/actions/connection-api.actions'
 import {setActiveChatId} from "../../../store/actions/connection.actions";
-import {selectUser} from "../../../store/selectors/user.selectors";
+import {selectUser, selectUserID} from "../../../store/selectors/user.selectors";
 @Component({
   selector: 'app-group-dialog',
   standalone: true,
@@ -31,10 +31,14 @@ export class GroupDialogComponent implements OnInit {
   namedMessage$:Observable<GroupMessageWithName[]>;
   messages:GroupMessage[];
   users$: Observable<Profile[]>;
+  @Input() text: string = '';
+  @Output() newText = new EventEmitter<string>()
+  private userId$: Observable<string>;
   constructor(private router:Router, private store:Store){
     this.groupID$ = this.store.select(selectActiveGroupID)//this.route.snapshot.params['id']  //select
     this.messages$ = this.store.select(selectMessagesByGroupId);
     this.users$ = this.store.select(selectAllPeople)
+    this.userId$ = this.store.select(selectUserID)
     // this.namedMessage$ = combineLatest([this.messages$, this.users$]).pipe(
     //   map(([messages, users])=> {
     //     const res:GroupMessageWithName[] = [];
@@ -89,6 +93,10 @@ export class GroupDialogComponent implements OnInit {
   deleteGroup(){
     this.groupID$.subscribe(groupId => this.store.dispatch(deleteGroup({id:groupId})))
     this.router.navigate(['/'])
+  }
+
+  sendMessage(message:string){
+    this.groupID$.subscribe(groupID => this.store.dispatch(addMessageToGroup({groupID, message})));
   }
 
 
