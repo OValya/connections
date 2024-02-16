@@ -56,7 +56,7 @@ export class GroupDialogComponent implements OnInit {
         if(messages) messages.slice().sort((a, b)=>+a.createdAt.S - +b.createdAt.S).map(m=> {
           const profile = users.find(user => user.uid.S==m.authorID.S)
           const name = profile ? profile.name.S : 'Deleted'
-          res.push({message:m, authorName:name});
+          res.push({message:m, authorName:name, authorId:profile!.uid.S});
         });
 
         return res
@@ -69,22 +69,10 @@ export class GroupDialogComponent implements OnInit {
         }
       }
     )
-
-
-
-
-
-   // this.namedMessage$.subscribe(items => console.log(items))
-
-    //this.store.dispatch(setActiveChatId({groupID:this.groupID}))
-    //this.store.dispatch(loadGroupById({groupID:this.groupID}))
-    // this.messages$ = this.store.select(selectMessagesByGroupId)
-    //   .pipe(
-    //     tap((items)=>console.log('items', items)),
-    //     map((items)=> items.slice().sort((a, b) => +a.createdAt.S - +b.createdAt.S)),
-    //   )
-
   }
+
+
+
 
   update(){
     this.store.dispatch(loadGroupById({groupID:this.groupID, since:this.since}))

@@ -7,10 +7,11 @@
   <mat-divider></mat-divider>
   <div class="group__main">
   @for (message of namedMessage$ | async; track message) {
-    <div class="message">
-      <p>{{message.message.createdAt.S| date:'medium'}} </p>
-      <p>{{message.authorName}} </p>
-      <p>{{message.message.message.S}} </p>
+    <div class="message" [style.text-align]="message.authorId == (userId$ | async) ? 'right' : 'left' " >
+      <p style="font-weight: bold; font-size: large">{{message.authorId == (userId$ | async) ?'me': message.authorName}} </p>
+      <p style="font-size: small;">{{message.message.createdAt.S| date:'medium'}} </p>
+
+      <p style="font-size: medium; font-style: italic">{{message.message.message.S}} </p>
     </div>
 
   }

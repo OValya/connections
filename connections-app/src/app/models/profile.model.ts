@@ -63,7 +63,8 @@ export interface GroupMessage{
 
 export  interface GroupMessageWithName{
   message:GroupMessage;
-  authorName:string
+  authorName:string;
+  authorId:string
 }
 
 
