@@ -15,7 +15,7 @@ import {
   selectAllPeople,
   selectMessagesByGroupId
 } from 'src/app/store/selectors/connection.selectors';
-import {deleteGroup, addMessageToGroup} from '../../../store/actions/connection-api.actions'
+import {deleteGroup, addMessageToGroup, loadGroupById} from '../../../store/actions/connection-api.actions'
 import {setActiveChatId} from "../../../store/actions/connection.actions";
 import {selectUser, selectUserID} from "../../../store/selectors/user.selectors";
 @Component({
@@ -30,39 +30,25 @@ export class GroupDialogComponent implements OnInit {
   messages$:Observable<GroupMessage[]>;
   namedMessage$:Observable<GroupMessageWithName[]>;
   messages:GroupMessage[];
+  since:string = '';
   users$: Observable<Profile[]>;
   @Input() text: string = '';
   @Output() newText = new EventEmitter<string>()
-  private userId$: Observable<string>;
-  constructor(private router:Router, private store:Store){
-    this.groupID$ = this.store.select(selectActiveGroupID)//this.route.snapshot.params['id']  //select
-    this.messages$ = this.store.select(selectMessagesByGroupId);
-    this.users$ = this.store.select(selectAllPeople)
-    this.userId$ = this.store.select(selectUserID)
-    // this.namedMessage$ = combineLatest([this.messages$, this.users$]).pipe(
-    //   map(([messages, users])=> {
-    //     const res:GroupMessageWithName[] = [];
-    //     messages.map(m=> {
-    //       const profile = users.find(user => user.uid==m.authorID)
-    //       const name = profile ? profile.name.S : 'Deleted'
-    //       res.push({message:m, authorName:name});
-    //
-    //     });
-    //     return res
-    //   })
-    // )
+  userId$: Observable<string>;
+  private groupID: string;
+  constructor(private router:Router, private store:Store, private  route: ActivatedRoute){
+    this.groupID = this.route.snapshot.params['id'] //this.store.select(selectActiveGroupID)//  //select
+    this.store.dispatch(setActiveChatId({groupID:this.groupID}))
+    this.store.dispatch(loadGroupById({groupID:this.groupID}))
 
-    // .pipe(
-    //   tap((items)=>console.log('items', items)),
-    //   map((items)=> items? items.slice().sort((a, b) => +a.createdAt.S - +b.createdAt.S):[]),
-    // )
+
   }
 
   ngOnInit(){
-    // this.messages$.subscribe(
-    //   (items)=> this.messages =
-    //     items? items.slice().sort((a, b) => +a.createdAt.S - +b.createdAt.S):[]
-    // )
+
+    this.messages$ = this.store.select(selectMessagesByGroupId);
+    this.users$ = this.store.select(selectAllPeople)
+    this.userId$ = this.store.select(selectUserID)
 
     this.namedMessage$ = combineLatest([this.messages$, this.users$]).pipe(
       map(([messages, users])=> {
@@ -72,9 +58,19 @@ export class GroupDialogComponent implements OnInit {
           const name = profile ? profile.name.S : 'Deleted'
           res.push({message:m, authorName:name});
         });
+
         return res
       })
     )
+
+    this.namedMessage$.subscribe(messages => {
+        if (messages.length != 0) {
+          this.since = messages[messages.length - 1].message.createdAt.S
+        }
+      }
+    )
+
+
 
 
 
@@ -90,13 +86,19 @@ export class GroupDialogComponent implements OnInit {
 
   }
 
+  update(){
+    this.store.dispatch(loadGroupById({groupID:this.groupID, since:this.since}))
+  }
   deleteGroup(){
     this.groupID$.subscribe(groupId => this.store.dispatch(deleteGroup({id:groupId})))
     this.router.navigate(['/'])
   }
 
   sendMessage(message:string){
-    this.groupID$.subscribe(groupID => this.store.dispatch(addMessageToGroup({groupID, message})));
+   // this.groupID$.subscribe(groupID =>
+      this.store.dispatch(addMessageToGroup({groupID:this.groupID, message, since:this.since}))//);
+      //this.store.dispatch(loadGroupById({groupID:this.groupID, since:this.since}))
+
   }
 
 

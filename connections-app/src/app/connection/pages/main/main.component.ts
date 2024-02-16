@@ -15,7 +15,7 @@ import { Observable, timer, map, takeWhile } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as ConnectionActions from "../../../store/actions/connection.actions";
 import * as ConnectionAPIActions from "../../../store/actions/connection-api.actions";
-import { selectAllGroups, selectAllPeople } from 'src/app/store/selectors/connection.selectors';
+import {selectAllGroups, selectAllPeople, selectMessagesByGroupId} from 'src/app/store/selectors/connection.selectors';
 import { TimerService } from 'src/app/core/services/timer.service';
 import { selectUserID } from 'src/app/store/selectors/user.selectors';
 import { setProfileID } from 'src/app/store/actions/user.actions';
@@ -104,8 +104,10 @@ export class MainComponent implements OnInit{
   }
 
   selectGroupChat(groupID:string){
-    this.store.dispatch(ConnectionActions.setActiveChatId({groupID}))
-    this.store.dispatch(ConnectionAPIActions.loadGroupById({groupID}))
+    // this.store.dispatch(ConnectionActions.setActiveChatId({groupID}))
+    // this.store.dispatch(ConnectionAPIActions.loadGroupById({groupID}))
+
+
     this.router.navigate(['group', groupID]);
   }
 

@@ -5,7 +5,7 @@ export const loadGroupList = createAction('[Group list] Load all group', props<{
 export const loadGroupById = createAction('[Group list] Load messages to group chat by ID', props<{messages:GroupMessage[], groupID:string, since?:string}>())
 export const setActiveChatId = createAction('[Group list] set active chat ID', props<{groupID:string}>())
 export const addGroup = createAction('[Group list] add group', props<{group:Group}>())
-export const addMessageToGroup = createAction('[Group list] add message to group', props<{message:string, groupID:string}>())
+export const addMessageToGroup = createAction('[Group list] add message to group', props<{message:string, groupID:string, since:string}>())
 
 
 export const deleteGroup = createAction('[Group list] delete user group', props<{id:string}>())

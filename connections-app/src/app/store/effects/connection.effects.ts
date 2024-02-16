@@ -48,7 +48,20 @@ export class ConnectionEffects {
       ofType(ConnectionAPIActions.addMessageToGroup),
       mergeMap(({message, groupID, since})=> {
         return this.groupService.sendMessageToGroup(message, groupID).pipe(
-          map(()=> ConnectionActions.addMessageToGroup({message, groupID}))
+          map(()=> ConnectionActions.addMessageToGroup({message, groupID, since}))
+          //todo сделать обработку ошибок
+        )
+      })
+    )
+  })
+
+  addMessagetoList = createEffect(()=>{
+    return this.actions$.pipe(
+      ofType(ConnectionActions.addMessageToGroup),
+      mergeMap(({message, groupID, since})=>{
+        return this.groupService.loadGroupChatById(groupID, since).pipe(
+          //  tap(({body})=>console.log('tap load messages', body?.Items! )),
+          map(({body})=> ConnectionActions.loadGroupById({messages:body?.Items!, groupID}))
         )
       })
     )
