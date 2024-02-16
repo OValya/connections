@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {CommonModule, DatePipe} from '@angular/common';
-import {GroupMessage, GroupMessageWithName, Message, Profile} from 'src/app/models/profile.model';
+import {Group, GroupMessage, GroupMessageWithName, Message, Profile} from 'src/app/models/profile.model';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
@@ -11,17 +11,21 @@ import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import { Store } from '@ngrx/store';
 import {Observable, map, tap, combineLatestAll, combineLatest} from 'rxjs';
 import {
-  selectActiveGroupID,
+  selectActiveGroupID, selectAllGroups,
   selectAllPeople,
   selectMessagesByGroupId
 } from 'src/app/store/selectors/connection.selectors';
 import {deleteGroup, addMessageToGroup, loadGroupById} from '../../../store/actions/connection-api.actions'
 import {setActiveChatId} from "../../../store/actions/connection.actions";
 import {selectUser, selectUserID} from "../../../store/selectors/user.selectors";
+import {group} from "@angular/animations";
+import {DeleteModalComponent} from "../../components/delete-modal/delete-modal.component";
+import * as ConnectionAPIActions from "../../../store/actions/connection-api.actions";
+import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 @Component({
   selector: 'app-group-dialog',
   standalone: true,
-  imports: [CommonModule, MatDividerModule, MatButtonModule, MatIconModule, FormsModule, MatFormFieldModule, MatInputModule, RouterModule ],
+  imports: [CommonModule, MatDividerModule, MatButtonModule, MatIconModule, FormsModule, MatFormFieldModule, MatInputModule, RouterModule, MatDialogModule ],
   templateUrl: './group-dialog.component.html',
   styleUrl: './group-dialog.component.scss'
 })
@@ -30,15 +34,19 @@ export class GroupDialogComponent implements OnInit {
   messages$:Observable<GroupMessage[]>;
   namedMessage$:Observable<GroupMessageWithName[]>;
   messages:GroupMessage[];
+  groups$: Observable<Group[]>;
+  userGroup$: Observable<Group|undefined>;
   since:string = '';
   users$: Observable<Profile[]>;
   @Input() text: string = '';
   @Output() newText = new EventEmitter<string>()
   userId$: Observable<string>;
   private groupID: string;
-  constructor(private router:Router, private store:Store, private  route: ActivatedRoute){
+
+  constructor(private router:Router, private store:Store, private  route: ActivatedRoute, public dialog:MatDialog,){
     this.groupID = this.route.snapshot.params['id'] //this.store.select(selectActiveGroupID)//  //select
     this.store.dispatch(setActiveChatId({groupID:this.groupID}))
+
     this.store.dispatch(loadGroupById({groupID:this.groupID}))
 
 
@@ -49,6 +57,12 @@ export class GroupDialogComponent implements OnInit {
     this.messages$ = this.store.select(selectMessagesByGroupId);
     this.users$ = this.store.select(selectAllPeople)
     this.userId$ = this.store.select(selectUserID)
+    this.groups$ = this.store.select(selectAllGroups)//.pipe(tap(value => console.log(value)))
+
+    this.userGroup$ = combineLatest( [this.groups$, this.userId$]).pipe(
+      map(([gr, id])=>
+      gr.filter(g=> g.createdBy.S==id).find(g=>g.id.S==this.groupID)))
+
 
     this.namedMessage$ = combineLatest([this.messages$, this.users$]).pipe(
       map(([messages, users])=> {
@@ -74,11 +88,18 @@ export class GroupDialogComponent implements OnInit {
 
 
 
+
+
   update(){
     this.store.dispatch(loadGroupById({groupID:this.groupID, since:this.since}))
   }
   deleteGroup(){
-    this.groupID$.subscribe(groupId => this.store.dispatch(deleteGroup({id:groupId})))
+    const dialogRef = this.dialog.open(DeleteModalComponent, {disableClose:true})
+    dialogRef.afterClosed().subscribe(data =>
+      {if(data) this.store.dispatch(ConnectionAPIActions.deleteGroup({id:this.groupID}))}
+    )
+
+   // this.groupID$.subscribe(groupId => this.store.dispatch(deleteGroup({id:groupId})))
     this.router.navigate(['/'])
   }
 
@@ -90,4 +111,5 @@ export class GroupDialogComponent implements OnInit {
   }
 
 
+  protected readonly group = group;
 }

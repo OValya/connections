@@ -1,8 +1,3 @@
-export interface User {
-  name: string|null;
-  email:string|null;
-  password:string|null;
-}
 
 export interface Group {
       id: {
@@ -18,8 +13,6 @@ export interface Group {
         S: string // user id who created this group
       }
 }
-
-
 
 export interface GroupList {
   Count: number;
@@ -66,11 +59,6 @@ export  interface GroupMessageWithName{
   authorName:string;
   authorId:string
 }
-
-
-
-
-
 
 export interface Message {
   authorID: string,

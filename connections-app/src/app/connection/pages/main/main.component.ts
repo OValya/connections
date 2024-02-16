@@ -32,7 +32,7 @@ import {loadGroupById} from "../../../store/actions/connection-api.actions";
 export class MainComponent implements OnInit{
   groups$: Observable<Group[]>;
   people$: Observable<Profile[]>;
-  groups: GroupList;
+ // groups: GroupList;
 
   timer$: Observable<number>
   timer: number;

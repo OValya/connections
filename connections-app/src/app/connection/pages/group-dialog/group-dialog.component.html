@@ -2,10 +2,13 @@
   <div class="group__header">
     <a routerLink="/"><mat-icon  fontIcon="arrow_back"></mat-icon></a>
     <button mat-flat-button color="primary" (click)="update()">update</button>
-    <button mat-flat-button (click)="deleteGroup()">delete</button>
+    @if((userGroup$|async)){<button mat-flat-button (click)="deleteGroup()">delete</button>}
   </div>
   <mat-divider></mat-divider>
   <div class="group__main">
+<!--    @for (group of groups$ | async; track group) {-->
+<!--      <p>{{group.createdBy.S}}</p>-->
+<!--    }-->
   @for (message of namedMessage$ | async; track message) {
     <div class="message" [style.text-align]="message.authorId == (userId$ | async) ? 'right' : 'left' " >
       <p style="font-weight: bold; font-size: large">{{message.authorId == (userId$ | async) ?'me': message.authorName}} </p>
