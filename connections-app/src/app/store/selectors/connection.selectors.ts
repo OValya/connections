@@ -2,6 +2,7 @@ import {createFeatureSelector, createSelector, MemoizedSelector, State} from "@n
 import {AppState, GroupChatState, GroupState} from "../connections.state";
 import {selectUserID} from "./user.selectors";
 import {Group} from "../../models/profile.model";
+import {state} from "@angular/animations";
 
 
 
@@ -27,6 +28,11 @@ export const selectMessagesByGroupId = createSelector(
   GroupMessagesSelector,
   selectActiveGroupID,
   (state, groupID)=> state.chats[groupID]
+)
+
+export const selectGroupTimer = createSelector(
+  GroupsSelector,
+  state => state.timerGroups
 )
 
 // export const selectAllGroupsByUserId = createSelector(

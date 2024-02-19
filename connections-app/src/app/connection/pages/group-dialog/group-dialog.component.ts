@@ -9,9 +9,9 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule} from '@angular/forms';
 import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import { Store } from '@ngrx/store';
-import {Observable, map, tap, combineLatestAll, combineLatest} from 'rxjs';
+import {Observable, map, combineLatest} from 'rxjs';
 import {
-  selectActiveGroupID, selectAllGroups,
+  selectAllGroups,
   selectAllPeople,
   selectMessagesByGroupId
 } from 'src/app/store/selectors/connection.selectors';
@@ -30,7 +30,6 @@ import {MatDialog, MatDialogModule} from "@angular/material/dialog";
   styleUrl: './group-dialog.component.scss'
 })
 export class GroupDialogComponent implements OnInit {
-  groupID$:Observable<string>;
   messages$:Observable<GroupMessage[]>;
   namedMessage$:Observable<GroupMessageWithName[]>;
   messages:GroupMessage[];
@@ -46,10 +45,7 @@ export class GroupDialogComponent implements OnInit {
   constructor(private router:Router, private store:Store, private  route: ActivatedRoute, public dialog:MatDialog,){
     this.groupID = this.route.snapshot.params['id'] //this.store.select(selectActiveGroupID)//  //select
     this.store.dispatch(setActiveChatId({groupID:this.groupID}))
-
     this.store.dispatch(loadGroupById({groupID:this.groupID}))
-
-
   }
 
   ngOnInit(){
@@ -57,7 +53,7 @@ export class GroupDialogComponent implements OnInit {
     this.messages$ = this.store.select(selectMessagesByGroupId);
     this.users$ = this.store.select(selectAllPeople)
     this.userId$ = this.store.select(selectUserID)
-    this.groups$ = this.store.select(selectAllGroups)//.pipe(tap(value => console.log(value)))
+    this.groups$ = this.store.select(selectAllGroups)
 
     this.userGroup$ = combineLatest( [this.groups$, this.userId$]).pipe(
       map(([gr, id])=>
@@ -85,11 +81,6 @@ export class GroupDialogComponent implements OnInit {
     )
   }
 
-
-
-
-
-
   update(){
     this.store.dispatch(loadGroupById({groupID:this.groupID, since:this.since}))
   }
@@ -98,16 +89,11 @@ export class GroupDialogComponent implements OnInit {
     dialogRef.afterClosed().subscribe(data =>
       {if(data) this.store.dispatch(ConnectionAPIActions.deleteGroup({id:this.groupID}))}
     )
-
-   // this.groupID$.subscribe(groupId => this.store.dispatch(deleteGroup({id:groupId})))
     this.router.navigate(['/'])
   }
 
   sendMessage(message:string){
-   // this.groupID$.subscribe(groupID =>
-      this.store.dispatch(addMessageToGroup({groupID:this.groupID, message, since:this.since}))//);
-      //this.store.dispatch(loadGroupById({groupID:this.groupID, since:this.since}))
-
+      this.store.dispatch(addMessageToGroup({groupID:this.groupID, message, since:this.since}))
   }
 
 

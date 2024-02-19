@@ -8,3 +8,4 @@ export const deleteGroup = createAction('[Group list API] Delete group', props<{
 
 export const addMessageToGroup = createAction('[Group Id API] Send Message to group', props<{message:string, groupID:string, since:string}>())
 export const loadPeopleList = createAction('[People list API] Load all people')
+export const loadConversations = createAction('[People list API] Load conversations')

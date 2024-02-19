@@ -11,3 +11,7 @@ export const addMessageToGroup = createAction('[Group list] add message to group
 export const deleteGroup = createAction('[Group list] delete user group', props<{id:string}>())
 
 export const loadPeopleList = createAction('[People list] Load all People', props<{people:Profile[]}>())
+
+export const setGroupTimer = createAction('[Group list] set timer', props<{timer:number}>())
+
+export const loadConversations = createAction('[People list] Add conversation to people list')

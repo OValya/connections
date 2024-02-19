@@ -8,7 +8,7 @@ import {
   GROUP_CHAT,
   NEW_GROUP,
   PEOPLE,
-  SEND_MESSAGE_GROUP_CHAT
+  SEND_MESSAGE_GROUP_CHAT, CONVERSATIONS
 } from 'src/app/endpoints/endpoints';
 import { Group, GroupList, GroupMessageList, PeopleList, Profile } from 'src/app/models/profile.model';
 
@@ -59,6 +59,13 @@ export class GroupsService {
     return this.http.get<PeopleList>(PEOPLE, {observe:'response'}).pipe(
       catchError(this.handleError),
       tap(()=> this.snackbarService.openSnackBar(`Loading people is success!`)))
+  }
+
+  loadConverstions():Observable<HttpResponse<any>>{
+    return this.http.get(CONVERSATIONS, {observe:'response'}).pipe(
+      catchError(this.handleError),
+      tap(()=>this.snackbarService.openSnackBar('loading conversations is success'))
+    )
   }
 
 

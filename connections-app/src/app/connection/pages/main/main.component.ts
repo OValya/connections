@@ -15,12 +15,18 @@ import { Observable, timer, map, takeWhile } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as ConnectionActions from "../../../store/actions/connection.actions";
 import * as ConnectionAPIActions from "../../../store/actions/connection-api.actions";
-import {selectAllGroups, selectAllPeople, selectMessagesByGroupId} from 'src/app/store/selectors/connection.selectors';
+import {
+  selectAllGroups,
+  selectAllPeople,
+  selectGroupTimer,
+  selectMessagesByGroupId
+} from 'src/app/store/selectors/connection.selectors';
 import { TimerService } from 'src/app/core/services/timer.service';
 import { selectUserID } from 'src/app/store/selectors/user.selectors';
 import { setProfileID } from 'src/app/store/actions/user.actions';
 import { DeleteModalComponent } from '../../components/delete-modal/delete-modal.component';
 import {loadGroupById} from "../../../store/actions/connection-api.actions";
+import {setGroupTimer} from "../../../store/actions/connection.actions";
 
 @Component({
   selector: 'app-main',
@@ -41,6 +47,7 @@ export class MainComponent implements OnInit{
   uid:string;
 
   nameGroup!:string;
+  isSetTimer$: Observable<number>;
 
   constructor(public dialog:MatDialog,
     private timerService:TimerService,
@@ -49,7 +56,8 @@ export class MainComponent implements OnInit{
     private store:Store){
       this.groups$ = this.store.select(selectAllGroups);
       this.people$ = this.store.select(selectAllPeople);
-      this.userID$ = this.store.select(selectUserID)
+      this.userID$ = this.store.select(selectUserID);
+      this.isSetTimer$ = this.store.select(selectGroupTimer)
   }
 
   ngOnInit(): void {
@@ -77,8 +85,8 @@ export class MainComponent implements OnInit{
    // this.store.dispatch(ConnectionAPIActions.loadGroupList());
     this.timerService.startTimer();
     this.timer$ = this.timerService.getTimer()
+    this.store.dispatch(setGroupTimer({timer:1}))
     this.timer$.subscribe(time => {this.timer = time; console.log('timer', this.timer)})
-
   }
 
 
@@ -106,9 +114,13 @@ export class MainComponent implements OnInit{
   selectGroupChat(groupID:string){
     // this.store.dispatch(ConnectionActions.setActiveChatId({groupID}))
     // this.store.dispatch(ConnectionAPIActions.loadGroupById({groupID}))
-
-
     this.router.navigate(['group', groupID]);
+  }
+
+  selectUserForChat(){
+    this.store.dispatch(ConnectionAPIActions.loadConversations())
+    const conversationID = '111'
+    //this.router.navigate((['conversation', conversationID]))
   }
 
 }

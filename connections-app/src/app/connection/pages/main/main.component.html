@@ -2,7 +2,7 @@
   <div class="group">
     <div class="buttons">
        <button mat-stroked-button (click)="updateGroup()"> update</button>
-       <!-- <div class="timer">{{timmer}}</div> -->
+       @if((isSetTimer$|async)){<div class="timer">timer:{{timer}}</div>}
        <button mat-flat-button color="primary" (click)="openDialog()"> create</button>
     </div>
     <mat-divider></mat-divider>
@@ -25,13 +25,6 @@
 
         </div>
         <div matListItemLine>{{group.createdAt.S| date}}</div>
-<!--        @if((userID$ | async) === group.createdBy.S) {-->
-<!--          <button mat-icon-button color="primary" (click)="deleteGroup(group.id.S)">-->
-<!--            <mat-icon>-->
-<!--              delete-->
-<!--            </mat-icon> -->
-<!--          </button>-->
-<!--        }-->
       </mat-list-item>
 
     }
@@ -46,7 +39,7 @@
     <mat-list>
       <div mat-subheader>People</div>
       @for (person of (people$ | async); track person) {
-      <mat-list-item>
+      <mat-list-item (click)="selectUserForChat()">
         <mat-icon matListItemIcon>people</mat-icon>
         <div matListItemTitle>{{person.name.S}}</div>
 

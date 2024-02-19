@@ -7,7 +7,8 @@ export interface AppState {
 }
 
 export interface GroupState{
-  count:number,
+  timerGroups:number;
+  timerPeople:number;
   groups: Group[],
   people: Profile[],
 }

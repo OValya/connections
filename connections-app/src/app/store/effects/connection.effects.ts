@@ -109,5 +109,17 @@ export class ConnectionEffects {
     )
   })
 
+  loadConversation = createEffect(()=>{
+    return this.actions$.pipe(
+      ofType(ConnectionAPIActions.loadConversations),
+      mergeMap(()=>{
+        return this.groupService.loadConverstions().pipe(
+          tap((value)=> console.log(value)),
+          map(({body})=>ConnectionActions.loadConversations())
+        )
+      })
+    )
+  })
+
 
 }
