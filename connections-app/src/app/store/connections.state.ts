@@ -1,9 +1,9 @@
-import {Group, GroupMessage, Profile} from "../models/profile.model";
+import {Group, GroupMessage, PrivateChat, Profile} from "../models/profile.model";
 
 export interface AppState {
-  groups: GroupState;
+  groups: GroupState;  //group chats and private conversation
   chats: GroupChatState;
-  users: UserState;
+  user: UserState;
 }
 
 export interface GroupState{
@@ -11,6 +11,7 @@ export interface GroupState{
   timerPeople:number;
   groups: Group[],
   people: Profile[],
+  conversations: PrivateChat[]
 }
 
 export interface GroupChatState {
@@ -19,7 +20,7 @@ export interface GroupChatState {
   activeChatID:string,
 }
 
-export interface UserState{
+export interface UserState{  //for user login
   profile:Profile|null;
   token:string|null;
   loading: boolean,

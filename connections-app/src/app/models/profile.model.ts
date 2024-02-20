@@ -23,19 +23,9 @@ export interface PeopleList{
   Count:number;
   Items:Profile[] //??
 }
-// export interface PrivateChatList{
-//   Count:number;
-//   Items:Chat[] //??
-// }
 
-// export interface PrivateChat{
-//   id: {
-//         S: string // conversation id
-//       };
-//   companionID: {
-//         S: string // conversation parter's id
-//       }
-// }
+
+
 
 export interface GroupMessageList{
   Count:number,
@@ -75,5 +65,33 @@ export interface Profile {
     S:string};
   createdAt: {
     S:string}; // unix timestamp in milliseconds
+}
+
+export interface UserWithConversation{
+  name:string;
+  uid:string;
+  conversationId:string
+}
+
+
+
+export interface PrivateChat{
+  id: string; //conversation id
+  companionID: string // conversation parter's id
+}
+
+export interface PrivateChatList{
+  Count:number;
+  Items:PrivateChat[] //??
+}
+
+export interface PrivateChatDTO{
+  id: {S:string}; //conversation id
+  companionID: {S:string} // conversation parter's id
+}
+
+export interface PrivateChatListDTO{
+  Count:number;
+  Items:PrivateChatDTO[] //??
 }
 

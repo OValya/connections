@@ -7,7 +7,8 @@ const initialState:GroupState = {
   timerGroups:0,
   timerPeople:0,
   groups:[],
-  people:[]
+  people:[],
+  conversations:[]
 }
 
 export const GroupsReducer = createReducer(initialState,
@@ -15,7 +16,9 @@ export const GroupsReducer = createReducer(initialState,
   on(ConnectionActions.addGroup, (state, action)=> ({...state, groups:[...state.groups, action.group]})),
   on(ConnectionActions.deleteGroup, (state, action)=> ({...state, groups:state.groups.filter(it => it.id.S != action.id)})),
   on(ConnectionActions.loadPeopleList, (state, action)=> ({...state, people:action.people})),
-  on(ConnectionActions.setGroupTimer, (state, action)=> ({...state, timerGroups:action.timer}))
+  on(ConnectionActions.setGroupTimer, (state, action)=> ({...state, timerGroups:action.timer})),
+  on(ConnectionActions.loadConversations, (state, action)=> ({...state, conversations:action.conversations})),
+  on(ConnectionActions.addNewConversation, (state, action)=> ({...state, conversations:[...state.conversations, action.conversation]})),
 )
 
 const initialStateGroupChat:GroupChatState = {

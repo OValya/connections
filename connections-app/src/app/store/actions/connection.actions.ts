@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store"
-import { Group, GroupMessage, Profile } from "src/app/models/profile.model"
+import {Group, GroupMessage, PrivateChat, Profile} from "src/app/models/profile.model"
 
 export const loadGroupList = createAction('[Group list] Load all group', props<{groups:Group[]}>())
 export const loadGroupById = createAction('[Group list] Load messages to group chat by ID', props<{messages:GroupMessage[], groupID:string, since?:string}>())
@@ -14,4 +14,5 @@ export const loadPeopleList = createAction('[People list] Load all People', prop
 
 export const setGroupTimer = createAction('[Group list] set timer', props<{timer:number}>())
 
-export const loadConversations = createAction('[People list] Add conversation to people list')
+export const loadConversations = createAction('[People list] Add conversations', props<{conversations:PrivateChat[]}>())
+export const addNewConversation = createAction('[Conversation] Add conversation to people list', props<{conversation:PrivateChat}>())

@@ -11,7 +11,7 @@
     @for (group of groups$ |async; track group) {
 
       <mat-list-item style="cursor: pointer" (click)="selectGroupChat(group.id.S)">
-        <mat-icon style="color: blueviolet;" matListItemIcon>chat</mat-icon>
+        <mat-icon style="color: blueviolet;" matListItemIcon>forum</mat-icon>
 
         <div  matListItemTitle>
           {{group.name.S}}
@@ -38,10 +38,14 @@
     <mat-divider></mat-divider>
     <mat-list>
       <div mat-subheader>People</div>
-      @for (person of (people$ | async); track person) {
-      <mat-list-item (click)="selectUserForChat()">
+      @for (person of (combine$ | async); track person) {
+      <mat-list-item style="cursor: pointer" (click)="selectUserForChat(person.conversationId, person.uid)">
         <mat-icon matListItemIcon>people</mat-icon>
-        <div matListItemTitle>{{person.name.S}}</div>
+        <div matListItemTitle >
+          {{person.name}}
+         @if (person.conversationId){<mat-icon style="color: blueviolet" fontIcon="chat"></mat-icon>}
+        </div>
+
 
       </mat-list-item>
       }

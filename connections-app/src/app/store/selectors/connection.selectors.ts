@@ -18,6 +18,11 @@ export const selectAllPeople = createSelector(
   (state)=>state.people
 )
 
+export const selectAllConversations = createSelector(
+  GroupsSelector,
+  state => state.conversations
+)
+
 export const GroupMessagesSelector = createFeatureSelector<GroupChatState>('messages');
 
 export const selectActiveGroupID = createSelector(

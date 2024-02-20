@@ -8,9 +8,17 @@ import {
   GROUP_CHAT,
   NEW_GROUP,
   PEOPLE,
-  SEND_MESSAGE_GROUP_CHAT, CONVERSATIONS
+  SEND_MESSAGE_GROUP_CHAT, CONVERSATIONS, NEW_CONVERSATION
 } from 'src/app/endpoints/endpoints';
-import { Group, GroupList, GroupMessageList, PeopleList, Profile } from 'src/app/models/profile.model';
+import {
+  Group,
+  GroupList,
+  GroupMessageList,
+  PeopleList,
+  PrivateChat,
+  PrivateChatList, PrivateChatListDTO,
+  Profile
+} from 'src/app/models/profile.model';
 
 @Injectable({
   providedIn: 'root'
@@ -61,10 +69,26 @@ export class GroupsService {
       tap(()=> this.snackbarService.openSnackBar(`Loading people is success!`)))
   }
 
-  loadConverstions():Observable<HttpResponse<any>>{
-    return this.http.get(CONVERSATIONS, {observe:'response'}).pipe(
+  loadConverstions():Observable<PrivateChatList>{
+    return this.http.get<PrivateChatListDTO>(CONVERSATIONS, {observe:'response'}).pipe(
       catchError(this.handleError),
+      map(({body})=> {return {Items:this.transformData(body!), Count:body!.Count}}),
       tap(()=>this.snackbarService.openSnackBar('loading conversations is success'))
+    )
+  }
+
+  private transformData(data:PrivateChatListDTO):PrivateChat[]{
+    const transformedItems:PrivateChat[]=[]
+    data.Items.map(it => {
+      transformedItems.push({id: it.id.S, companionID:it.companionID.S})
+    })
+    return  transformedItems
+  }
+
+  createConversation(companion:string):Observable<HttpResponse<{conversationID: string}>>{
+    return this.http.post<{conversationID: string}>(NEW_CONVERSATION, {companion}, {observe:'response'} ).pipe(
+      catchError(this.handleError),
+      tap(()=>this.snackbarService.openSnackBar('creation is succeed'))
     )
   }
 

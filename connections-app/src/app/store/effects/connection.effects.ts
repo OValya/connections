@@ -114,8 +114,19 @@ export class ConnectionEffects {
       ofType(ConnectionAPIActions.loadConversations),
       mergeMap(()=>{
         return this.groupService.loadConverstions().pipe(
-          tap((value)=> console.log(value)),
-          map(({body})=>ConnectionActions.loadConversations())
+          //tap(({body})=> console.log(body)),
+          map(({Items})=>ConnectionActions.loadConversations({conversations:Items}))
+        )
+      })
+    )
+  })
+
+  createConversation = createEffect(()=>{
+    return this.actions$.pipe(
+      ofType(ConnectionAPIActions.createConversation),
+      mergeMap(({companion})=>{
+        return this.groupService.createConversation(companion).pipe(
+          map(({body})=>ConnectionActions.addNewConversation({conversation:{id:body?.conversationID!, companionID:companion}}))
         )
       })
     )

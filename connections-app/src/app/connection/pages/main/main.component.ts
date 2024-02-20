@@ -3,7 +3,7 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatIconModule} from '@angular/material/icon';
 import {CommonModule, DatePipe} from '@angular/common';
 import {MatListModule} from '@angular/material/list';
-import { Group, GroupList, PeopleList, Profile } from 'src/app/models/profile.model';
+import {Group, GroupList, PeopleList, PrivateChat, Profile, UserWithConversation} from 'src/app/models/profile.model';
 import {MatButtonModule} from '@angular/material/button';
 import { MatDialog, MatDialogConfig, MatDialogModule } from '@angular/material/dialog';
 import { ModalComponent } from '../../components/modal/modal.component';
@@ -16,6 +16,7 @@ import { Store } from '@ngrx/store';
 import * as ConnectionActions from "../../../store/actions/connection.actions";
 import * as ConnectionAPIActions from "../../../store/actions/connection-api.actions";
 import {
+  selectAllConversations,
   selectAllGroups,
   selectAllPeople,
   selectGroupTimer,
@@ -27,6 +28,7 @@ import { setProfileID } from 'src/app/store/actions/user.actions';
 import { DeleteModalComponent } from '../../components/delete-modal/delete-modal.component';
 import {loadGroupById} from "../../../store/actions/connection-api.actions";
 import {setGroupTimer} from "../../../store/actions/connection.actions";
+import {combineLatest} from "rxjs";
 
 @Component({
   selector: 'app-main',
@@ -38,7 +40,9 @@ import {setGroupTimer} from "../../../store/actions/connection.actions";
 export class MainComponent implements OnInit{
   groups$: Observable<Group[]>;
   people$: Observable<Profile[]>;
- // groups: GroupList;
+  conversations$:Observable<PrivateChat[]>
+  combine$:Observable<UserWithConversation[]>
+  // groups: GroupList;
 
   timer$: Observable<number>
   timer: number;
@@ -56,6 +60,7 @@ export class MainComponent implements OnInit{
     private store:Store){
       this.groups$ = this.store.select(selectAllGroups);
       this.people$ = this.store.select(selectAllPeople);
+      this.conversations$ = this.store.select(selectAllConversations)
       this.userID$ = this.store.select(selectUserID);
       this.isSetTimer$ = this.store.select(selectGroupTimer)
   }
@@ -69,6 +74,33 @@ export class MainComponent implements OnInit{
     this.people$.subscribe((data)=>{
       if(data.length===0) this.store.dispatch(ConnectionAPIActions.loadPeopleList());
    })
+
+    this.conversations$.subscribe((data)=>{
+      if(data.length===0) this.store.dispatch(ConnectionAPIActions.loadConversations());
+    })
+
+   this.combine$ =  combineLatest([this.people$, this.conversations$]).pipe(
+     map(([people, conversations])=> {
+       console.log('people', people)
+       console.log('con', conversations)
+       const res:UserWithConversation[] = []
+       let item:UserWithConversation;
+       if (people.length!=0){
+         people.map(p => {
+           const personWithChat = conversations.find(c => p.uid.S === c.companionID);
+           personWithChat
+             ? item={conversationId:personWithChat.id, uid:p.uid.S, name:p.name.S}
+             : item={uid:p.uid.S, name:p.name.S, conversationId:''}
+           res.push(item)
+         })
+       }
+       return res
+     })
+   )
+
+
+
+
 
 
 
@@ -117,10 +149,10 @@ export class MainComponent implements OnInit{
     this.router.navigate(['group', groupID]);
   }
 
-  selectUserForChat(){
-    this.store.dispatch(ConnectionAPIActions.loadConversations())
-    const conversationID = '111'
-    //this.router.navigate((['conversation', conversationID]))
+  selectUserForChat(conversationID:string|undefined, companion:string){
+    if(!conversationID) this.store.dispatch(ConnectionAPIActions.createConversation({companion}))
+    this.router.navigate((['conversation', conversationID]))
+    //
   }
 
 }
