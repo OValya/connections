@@ -29,5 +29,18 @@ const initialStateGroupChat:GroupChatState = {
 
 export const GroupChatReducer = createReducer(initialStateGroupChat,
   on(ConnectionActions.loadGroupById, (state, action)=>({...state, chats:{...state.chats, [action.groupID]:action.messages}})),
-  on(ConnectionActions.setActiveChatId, (state, action)=>({...state, activeChatID:action.groupID }))
-  )
+  on(ConnectionActions.addMessagesToGroup, (state, action)=>({...state, chats:{...state.chats, [action.groupID]:[...state.chats[action.groupID], ...action.messages]}})),
+  on(ConnectionActions.setSinceParam, (state, action)=>({...state, since:{...state.since, [action.groupID]:action.since}})),
+  on(ConnectionActions.setActiveChatId, (state, action)=>({...state, activeChatID:action.groupID })),
+)
+
+// const initialStatePrivateChat:GroupChatState = {
+//   activeChatID:'',
+//   chats: {},
+//   since:{}
+// }
+//
+// export const PrivateChatReducer = createReducer(initialStatePrivateChat,
+//   on(ConnectionActions.loadGroupById, (state, action)=>({...state, chats:{...state.chats, [action.groupID]:action.messages}})),
+//   on(ConnectionActions.setActiveChatId, (state, action)=>({...state, activeChatID:action.groupID }))
+// )

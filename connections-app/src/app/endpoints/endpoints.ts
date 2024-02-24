@@ -10,3 +10,4 @@ export const NEW_CONVERSATION ='https://tasks.app.rs.school/angular/conversation
 export const GROUP_CHAT = 'https://tasks.app.rs.school/angular/groups/read' // ?groupID={:groupID}&since={:since}
 export const SEND_MESSAGE_GROUP_CHAT = 'https://tasks.app.rs.school/angular/groups/append'
 
+export const GET_CONVERSATION = 'https://tasks.app.rs.school/angular/conversations/read'//?conversationID=46f6aq96dzs&since=1699833375896'

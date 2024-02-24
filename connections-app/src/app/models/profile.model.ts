@@ -28,8 +28,9 @@ export interface PeopleList{
 
 
 export interface GroupMessageList{
-  Count:number,
-  Items: GroupMessage[]
+  Count:number;
+  Items: GroupMessage[];
+  // since: string;
 }
 
 export interface GroupMessage{
@@ -55,6 +56,8 @@ export interface Message {
   message: string,
   createdAt: string
 }
+
+
 
 export interface Profile {
   email: {

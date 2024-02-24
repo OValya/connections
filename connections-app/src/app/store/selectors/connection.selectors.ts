@@ -29,6 +29,12 @@ export const selectActiveGroupID = createSelector(
   GroupMessagesSelector,
   state => state.activeChatID
 )
+
+export const selectSinceParam = createSelector(
+  GroupMessagesSelector,
+  selectActiveGroupID,
+  (state, groupID) => state.since[groupID]
+)
 export const selectMessagesByGroupId = createSelector(
   GroupMessagesSelector,
   selectActiveGroupID,

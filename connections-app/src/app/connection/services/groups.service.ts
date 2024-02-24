@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, map, tap, throwError } from 'rxjs';
+import {Observable, catchError, map, tap, throwError, mergeMap} from 'rxjs';
 import { SnackBarService } from 'src/app/core/services/snackbar.service';
 import {
   DELETE_GROUP,
@@ -34,8 +34,9 @@ export class GroupsService {
     )
   }
   loadGroupChatById(id:string, since?:string):Observable<HttpResponse<GroupMessageList>>{
-    const options = {params: new HttpParams().set('groupID', id) };
-    return this.http.get<GroupMessageList>(GROUP_CHAT, {...options, observe:"response"} ).pipe(
+    let param = new HttpParams().set('groupID', id);
+    if(since) param = param.set('since', since);
+    return this.http.get<GroupMessageList>(GROUP_CHAT, {params:param, observe:"response"} ).pipe(
       catchError(this.handleError),
       tap(()=> this.snackbarService.openSnackBar(`Loading message for group ${id} is success!`))
     )
@@ -44,7 +45,7 @@ export class GroupsService {
   sendMessageToGroup(message:string, groupID:string):Observable<HttpResponse<{}>>{
     return this.http.post(SEND_MESSAGE_GROUP_CHAT, {message, groupID}, {observe:'response'}).pipe(
       catchError(this.handleError),
-      tap(()=> this.snackbarService.openSnackBar('Your message is send'))
+      tap(()=> this.snackbarService.openSnackBar('Your message is send')),
     )
   }
 

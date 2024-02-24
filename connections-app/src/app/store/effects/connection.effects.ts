@@ -1,11 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
+import {Actions, concatLatestFrom, createEffect, ofType} from "@ngrx/effects";
 import { LoadingService } from "src/app/core/services/loading.service";
 import * as ConnectionActions from "../actions/connection.actions";
 import * as ConnectionAPIActions from "../actions/connection-api.actions";
 import { GroupsService } from "src/app/connection/services/groups.service";
 import { map, mergeMap, tap } from "rxjs";
+import {Store} from "@ngrx/store";
+import {appendMessagesToGroupById} from "../actions/connection-api.actions";
+import {selectSinceParam} from "../selectors/connection.selectors";
 
 @Injectable()
 export class ConnectionEffects {
@@ -15,6 +18,7 @@ export class ConnectionEffects {
     private readonly loadingService: LoadingService,
     private readonly groupService: GroupsService,
     private readonly router: Router,
+    private store: Store
   ) {}
 
   loadGroups$ = createEffect(()=>{
@@ -33,10 +37,16 @@ export class ConnectionEffects {
   loadGroupMessages$ = createEffect(()=>{
     return this.actions$.pipe(
       ofType(ConnectionAPIActions.loadGroupById),
-      mergeMap(({groupID})=>{
-        return this.groupService.loadGroupChatById(groupID).pipe(
+      concatLatestFrom(() => this.store.select(selectSinceParam)),
+      mergeMap(([data, since])=>{
+        return this.groupService.loadGroupChatById(data.groupID, since).pipe(
         //  tap(({body})=>console.log('tap load messages', body?.Items! )),
-          map(({body})=> ConnectionActions.loadGroupById({messages:body?.Items!, groupID}))
+          map(({body})=>
+            since
+              ?
+              ConnectionActions.addMessagesToGroup({messages:body?.Items!, groupID:data.groupID})
+              :
+              ConnectionActions.loadGroupById({messages:body?.Items!, groupID:data.groupID}))
         )
       })
 
@@ -45,10 +55,10 @@ export class ConnectionEffects {
 
   sendMessageToGroup$ = createEffect(()=>{
     return this.actions$.pipe(
-      ofType(ConnectionAPIActions.addMessageToGroup),
+      ofType(ConnectionAPIActions.sendMessageToGroup),
       mergeMap(({message, groupID, since})=> {
         return this.groupService.sendMessageToGroup(message, groupID).pipe(
-          map(()=> ConnectionActions.addMessageToGroup({message, groupID, since}))
+          map(()=> ConnectionAPIActions.appendMessagesToGroupById({groupID, since}))
           //todo сделать обработку ошибок
         )
       })
@@ -57,11 +67,12 @@ export class ConnectionEffects {
 
   addMessagetoList = createEffect(()=>{
     return this.actions$.pipe(
-      ofType(ConnectionActions.addMessageToGroup),
-      mergeMap(({message, groupID, since})=>{
+      ofType(ConnectionAPIActions.appendMessagesToGroupById),
+      mergeMap(({groupID, since})=>{
         return this.groupService.loadGroupChatById(groupID, since).pipe(
           //  tap(({body})=>console.log('tap load messages', body?.Items! )),
-          map(({body})=> ConnectionActions.loadGroupById({messages:body?.Items!, groupID}))
+          map(({body})=> ConnectionActions.addMessagesToGroup({messages:body?.Items!, groupID}))
+
         )
       })
     )

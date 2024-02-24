@@ -1,8 +1,8 @@
 <div class="page">
   <div class="group__header">
     <a href="/"><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="arrow_back"></mat-icon></a>
-    <button mat-flat-button color="primary">update</button>
-    <button mat-flat-button>delete</button>
+    <button mat-flat-button color="primary" (click)="update()">update</button>
+    <button mat-flat-button (click)="delete()">delete</button>
   </div>
   <mat-divider></mat-divider>
   <div class="group__main">
@@ -20,7 +20,7 @@
     <mat-form-field class="input-message">
       <mat-label>Type your message</mat-label>
       <input matInput placeholder="hello...">
-      <button matSuffix mat-icon-button color="primary" aria-label="button for send message">
+      <button matSuffix mat-icon-button color="primary" aria-label="button for send message" (click)="send()">
         <mat-icon>send</mat-icon>
       </button>
     </mat-form-field>
