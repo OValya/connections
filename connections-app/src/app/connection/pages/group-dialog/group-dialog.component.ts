@@ -13,10 +13,9 @@ import {Observable, map, combineLatest, tap} from 'rxjs';
 import {
   selectAllGroups,
   selectAllPeople,
-  selectMessagesByGroupId, selectSinceParam
+  selectMessagesByGroupId,
 } from 'src/app/store/selectors/connection.selectors';
-import {deleteGroup, sendMessageToGroup, loadGroupById} from '../../../store/actions/connection-api.actions'
-import {setActiveChatId, setSinceParam} from "../../../store/actions/connection.actions";
+import * as ConnectionAction  from "../../../store/actions/connection.actions";
 import {selectUser, selectUserID} from "../../../store/selectors/user.selectors";
 import {group} from "@angular/animations";
 import {DeleteModalComponent} from "../../components/delete-modal/delete-modal.component";
@@ -43,22 +42,15 @@ export class GroupDialogComponent implements OnInit {
   userId$: Observable<string>;
   private groupID: string;
 
-  constructor(private router:Router, private store:Store, private  route: ActivatedRoute, public dialog:MatDialog,){
-    this.groupID = this.route.snapshot.params['id'] //this.store.select(selectActiveGroupID)//  //select
-    this.store.dispatch(setActiveChatId({groupID:this.groupID}))
-    // this.since$ = this.store.select(selectSinceParam).pipe(
-    //   tap((since)=> this.since=since)
-    // )
-    // this.since$.subscribe(since => {
-    //     this.store.dispatch(loadGroupById({groupID:this.groupID, since}))
-    // })
-
-    this.store.dispatch(loadGroupById({groupID:this.groupID}))//, since:this.since}))
-  }
+  constructor(private router:Router,
+              private store:Store,
+              private route: ActivatedRoute,
+              public dialog:MatDialog,){ }
 
   ngOnInit(){
-
-
+    this.groupID = this.route.snapshot.params['id'] //this.store.select(selectActiveGroupID)//  //select
+    this.store.dispatch(ConnectionAction.setActiveChatId({groupID:this.groupID}))
+    this.store.dispatch(ConnectionAPIActions.loadGroupById({groupID:this.groupID}))
     this.messages$ = this.store.select(selectMessagesByGroupId);
     this.users$ = this.store.select(selectAllPeople)
     this.userId$ = this.store.select(selectUserID)
@@ -86,7 +78,7 @@ export class GroupDialogComponent implements OnInit {
         if (messages.length != 0) {
 
           this.since = messages[messages.length - 1].message.createdAt.S;
-          this.store.dispatch(setSinceParam({since:this.since, groupID:this.groupID}))
+          this.store.dispatch(ConnectionAction.setSinceParam({since:this.since, groupID:this.groupID}))
         }
       }
     )
@@ -104,7 +96,7 @@ export class GroupDialogComponent implements OnInit {
   }
 
   sendMessage(message:string){
-      this.store.dispatch(sendMessageToGroup({groupID:this.groupID, message, since:this.since}))
+      this.store.dispatch(ConnectionAPIActions.sendMessageToGroup({groupID:this.groupID, message, since:this.since}))
   }
 
 
